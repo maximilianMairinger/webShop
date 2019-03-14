@@ -3,6 +3,7 @@
 }
 
 c-login-window {
+  min-width: 300px;
   min-height: 75mm;
   position: absolute;
   right: 20%;

@@ -1,69 +1,60 @@
 import Page from "./../page";
-import LoginElem from "./../../../_window/loginWindow/loginWindow";
-import lang, {fc} from "./../../../../lib/language/language";
+import LoginWindow from "./../../../_window/loginWindow/loginWindow";
 import Footer from "./../../../drifter/drifter";
 
 
-class DayTime {
-  constructor(public from: number, public name: string) {
-
-  }
-  is(time: number): boolean {
-    return time >= this.from;
-  }
-}
-
-const dayTimes = [
-  new DayTime(4, "morning"),
-  new DayTime(12, "afternoon"),
-  new DayTime(18,"evening")
-];
-function getDayTime(): string {
-  let h = new Date().getHours()
-  for (let i = 0; i < dayTimes.length; i++) {
-    let w = dayTimes[i].is(h);
-    if (!w) return dayTimes[i-1].name || "";
-  }
-  return dayTimes[dayTimes.length -1].name;
-}
 
 export default class loginPage extends Page {
   private footContainer: HTMLElement;
   private foot: Footer;
-  private login: LoginElem;
 
-  private preLoadStatus: "start" | "stop" = "stop";
-  constructor(public submitCallback?: Function) {
+  private loginElem: LoginWindow;
+  private regElem: LoginWindow;
+  constructor(public logedInCb: Function, startWindow: "register" | "login" = "login") {
     super();
+    this.loginElem = new LoginWindow(() => {
+      console.log("attemt to log in");
+    }, "Login", () => {
+      this.window = "register";
+      this.regElem.focusUsername();
+    }, "Register");
+
+    this.regElem = new LoginWindow(() => {
+      console.log("attemt to log in");
+    }, "Register", () => {
+      this.window = "login";
+
+      this.loginElem.focusUsername();
+    }, "Login");
+
+
     this.footContainer = ce("login-panel-foot-container");
+
+    this.sra(this.footContainer, this.loginElem, this.regElem);
+
+    this.window = startWindow;
+
+
+
 
     import("./../../../drifter/drifter").then(({default: foot}) => {
       this.foot = new foot();
       this.footContainer.apd(this.foot);
-      this.foot[this.preLoadStatus]();
+      this.foot.start();
     });
-
-    this.login = new LoginElem((...a) => {
-      if (this.submitCallback !== undefined) submitCallback(...a);
-    });
-    lang(["dayTimes.good", "dayTimes." + getDayTime()], (good, time) => {
-      this.login.heading = fc(good) + " " + fc(time);
-    });
-
-    this.sra(this.footContainer, this.login);
   }
-  protected activationCallback(active: boolean): void {
-    if (active) {
-      if (!this.login.username) this.login.focusUsername();
-      else this.login.focusPassword();
-
-      if (this.foot) this.foot.start();
-      else this.preLoadStatus = "start";
+  public set window(to: "register" | "login") {
+    if (to === "register") {
+      this.regElem.show();
+      this.loginElem.hide();
     }
     else {
-      if (this.foot) this.foot.stop();
-      else this.preLoadStatus = "stop";
+      this.loginElem.show();
+      this.regElem.hide();
     }
+  }
+  protected activationCallback(active: boolean): void {
+    this.loginElem.focusUsername();
   }
   stl() {
     return super.stl() + require('./loginPage.css').toString();

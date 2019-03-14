@@ -24,13 +24,13 @@ async function init() {
   })
 
   load(startPageName);
-  window.addEventListener("keydown", (e) => {
-    //Only rerender the dom to save bandwith
-    if ((e.ctrlKey && e.code === "KeyR") || e.code == "F5") {
-      load(startPageName);
-      e.preventDefault();
-    }
-  });
+  // window.addEventListener("keydown", (e) => {
+  //   //Only rerender the dom to save bandwith
+  //   if ((e.ctrlKey && e.code === "KeyR") || e.code == "F5") {
+  //     load(startPageName);
+  //     e.preventDefault();
+  //   }
+  // });
   //testing
   window.addEventListener("keydown", async (e) => {
     if (e.code === "KeyM") Notifier.error("sasd");

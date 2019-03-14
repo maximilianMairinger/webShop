@@ -1,9 +1,5 @@
 import Manager from "./../manager";
 import Page from "./../../_page/page";
-import Noti from "./../../../../lib/notifier/notifier";
-import delay from "./../../../../lib/delay/delay";
-import Notification from "./../../../notification/notification";
-import { setWeek } from "../../../../lib/unit/unit";
 import lazyLoad, { ImportanceMap, Import } from "./../../../../lib/lazyLoad/lazyLoad";
 
 
@@ -19,29 +15,10 @@ export default class PageManager extends Manager {
 
     const impMap = new ImportanceMap<() => Promise<object>>(
       {key: new Import<string>("login", 1, (Login) => {
-        return new Login((username: string, password: string) => {
-          let isItLoadedYet = false;
-          let holdOnNoti: Notification;
-          delay(1).then(() => {
-            if (!isItLoadedYet) holdOnNoti = Noti.log(true, "Hold on please. The main application hasnt loaded yet.");
-          });
-          this.pages.get("main").then(() => {
-            isItLoadedYet = true;
-            if (holdOnNoti !== undefined) holdOnNoti.close();
-          });
-
-          //test
-          if (username === "qwer" && password === "qwer") {
-            this.pages.get("main").then(() => {
-              setWeek("1");
-              this.page = "main";
-            });
-          }
+        return new Login(() => {
+          console.log("logged in");
         });
       }), val: () => {return import("./../../_page/loginPage/loginPage")}},
-      {key: new Import<string>("main", 2, (Main) => {
-        return new Main("overview");
-      }), val: () => {return import("./../../_page/mainPage/mainPage")}}
     );
 
     const load = lazyLoad(impMap);

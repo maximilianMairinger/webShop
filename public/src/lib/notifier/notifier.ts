@@ -1,6 +1,5 @@
 import Notification from "./../../_element/notification/notification";
 import NotificationQueue from "./../../_element/notificationQueue/notificationQueue";
-import lang, {fc} from "./../language/language";
 
 export default class Notifier {
   public static queue = new NotificationQueue();
@@ -80,10 +79,7 @@ export default class Notifier {
       return this.queue.appendNotification(
         new Notification(title_text_defaultTitle, text, type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()}));
     else if (typeof title_text_defaultTitle === "boolean") {
-      let noti = new Notification(undefined, text, type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()})
-      lang(type, (s) => {
-        noti.heading = fc(s);
-      });
+      let noti = new Notification(type, text, type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()})
       return this.queue.appendNotification(noti);
     }
   }

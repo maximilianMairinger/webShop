@@ -28,3 +28,7 @@ c-block-button {
   float: left;
   margin: 15px 0;
 }
+
+.right {
+  float: right;
+}

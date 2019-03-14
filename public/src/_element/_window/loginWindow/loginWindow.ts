@@ -1,14 +1,14 @@
 import Window from "./../window";
 import Input from "./../../input/input";
 import Button from "./../../_button/_rippleButton/blockButton/blockButton";
-import lang, {fc , sc} from "./../../../lib/language/language";
 
 export default class LoginWindow extends Window {
   private headingElem: HTMLElement;
   private usernameInput: Input;
   private passwordInput: Input;
   private submitButton: Button;
-  constructor(public submitCallback?: Function, heading?: string) {
+  private changeButton: Button;
+  constructor(public submitCallback: Function, heading: string, changePls: Function, chnageBtnTxt: string) {
     super();
     this.spellcheck = false;
 
@@ -21,23 +21,17 @@ export default class LoginWindow extends Window {
       localStorage.username = this.usernameInput.value;
     };
 
-    this.usernameInput = new Input(undefined, "text", cb);
+    this.usernameInput = new Input("Username", "text", cb);
     if (localStorage.username !== undefined) this.usernameInput.value = localStorage.username;
-    lang("username", (s) => {
-      this.usernameInput.placeholderText = fc(s);
-    });
 
-    this.passwordInput = new Input(undefined, "password", cb);
-    lang("password", (s) => {
-      this.passwordInput.placeholderText = fc(s);
-    });
+    this.passwordInput = new Input("Password", "password", cb);
 
-    this.submitButton = new Button("", cb);
-    lang("login", (login) => {
-      this.submitButton.text = sc(login);
-    })
+    this.submitButton = new Button(heading, cb);
 
-    this.sra(this.headingElem, this.usernameInput, this.passwordInput, this.submitButton);
+    this.changeButton = new Button(chnageBtnTxt, changePls);
+    this.changeButton.addClass("right");
+
+    this.sra(this.headingElem, this.usernameInput, this.passwordInput, this.submitButton, this.changeButton);
 
     this.on("keydown", (e) => {
       if (e.code === "Escape") this.blur();
