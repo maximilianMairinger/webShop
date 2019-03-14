@@ -1,0 +1,24 @@
+:host {
+  min-height: 150mm;
+}
+
+c-login-window {
+  min-height: 75mm;
+  position: absolute;
+  right: 20%;
+  bottom: 30mm;
+}
+
+c-drifter {
+  width: 100%;
+  height: 100%;
+}
+login-panel-foot-container {
+  background: rgba(0,0,0,.05);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70mm;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}

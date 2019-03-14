@@ -1,0 +1,29 @@
+:host {
+  cursor: pointer;
+  font-size: 2em;
+}
+:host(:focus) span {
+  text-decoration: underline;
+}
+switchableHeading-container {
+  display: block;
+  position: absolute;
+  width: max-content;
+  width: -moz-max-content;
+  opacity: 0;
+  margin-left: -5px;
+}
+span {
+  display: inline-block;
+  white-space: pre;
+}
+img {
+  display: inline;
+  height: .5em;
+  margin-left: 300px;
+  margin: 2px 5px;
+}
+.show {
+  opacity: 1;
+  margin-left: 10px;
+}

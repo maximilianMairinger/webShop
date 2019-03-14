@@ -1,0 +1,17 @@
+:host {
+  transition: background-color .6s;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,.14);
+  background: white;
+  width: fit-content;
+  height: fit-content;
+}
+:host(:focus) {
+  transition: .4s;
+  border: 1px solid rgba(0,0,0,.6);
+}
+button-text {
+  display: block;
+  font-size: 1em;
+  padding: 5px 15px;
+}

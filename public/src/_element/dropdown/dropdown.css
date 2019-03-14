@@ -1,0 +1,14 @@
+:host(:focus) {
+  margin-top: 2px;
+}
+:host {
+  transition: .1s;
+}
+c-button {
+  margin-left: 0.9px;
+  margin-top: 4px;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  background-size: cover;
+}

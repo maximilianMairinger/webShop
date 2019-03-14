@@ -1,0 +1,32 @@
+:host {
+  border-radius: 5px;
+}
+
+c-bar, bar-chart-axis-label {
+  font-size: 10pt;
+  margin: 0 30px;
+  width: 40px;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+
+bar-chart-content {
+  position: absolute;
+  top: 5%;
+  width: 100%;
+  height: 85%;
+  display: flex;
+  justify-content: center;
+}
+
+bar-chart-axis {
+  position: absolute;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  bottom: 0;
+  width: 100%;
+  height: 10%;
+  background: rgba(0,0,0,.05);
+}

@@ -1,0 +1,30 @@
+:host {
+  background: rgb(247,247,247);
+  padding: 50px;
+}
+login-window-heading {
+  display: block;
+  position: relative;
+  float: left;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+login-window-heading > text-placeholder {
+  background: lightgray;
+  width: 200px;
+  height: 100%;
+  display: inline-block;
+}
+
+c-input {
+  margin: 15px 0;
+  float: left;
+}
+
+c-block-button {
+  float: left;
+  margin: 15px 0;
+}

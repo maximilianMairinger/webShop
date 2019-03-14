@@ -1,0 +1,40 @@
+{
+  "name": "lb-planer-frontend",
+  "version": "1.0.0",
+  "description": "Overhaul of the lb-planer-frontend.",
+  "main": "native.js",
+  "scripts": {
+    "build": "webpack --config webpack.prod.config.js --display-modules",
+    "dev": "webpack --config webpack.dev.config.js",
+    "bos": "webpack --config webpack.bos.config.js",
+    "test": "webpack --config webpack.test.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Logfro/LB-Planer-frontend.git"
+  },
+  "author": "Maximilian Mairinger & Farid Goldmann & Daniel Zimmermann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Logfro/LB-Planer-frontend/issues"
+  },
+  "homepage": "https://github.com/Logfro/LB-Planer-frontend#readme",
+  "devDependencies": {
+    "@types/hammerjs": "^2.0.36",
+    "@types/node": "^10.12.18",
+    "css-loader": "^2.1.0",
+    "cssnano": "^4.1.8",
+    "postcss-loader": "^3.0.0",
+    "terser-webpack-plugin": "^1.2.2",
+    "to-string-loader": "^1.1.5",
+    "ts-loader": "^5.3.3",
+    "typescript": "3.2.2",
+    "webpack": "^4.29.1",
+    "webpack-cli": "^3.2.1",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "hammerjs": "^2.0.8",
+    "xrray": "^2.3.4"
+  }
+}
