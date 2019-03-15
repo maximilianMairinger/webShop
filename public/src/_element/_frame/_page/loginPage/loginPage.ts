@@ -1,6 +1,7 @@
 import Page from "./../page";
 import LoginWindow from "./../../../_window/loginWindow/loginWindow";
 import Footer from "./../../../drifter/drifter";
+import post from "../../../../lib/post/post";
 
 
 
@@ -12,20 +13,30 @@ export default class loginPage extends Page {
   private regElem: LoginWindow;
   constructor(public logedInCb: Function, startWindow: "register" | "login" = "login") {
     super();
-    this.loginElem = new LoginWindow(() => {
-      console.log("attemt to log in");
+    this.loginElem = new LoginWindow(async (username: string, password: string) => {
+      let res = await post("auth", {body: {
+        username,
+        password
+      }});
+      console.log(res)
+
     }, "Login", () => {
       this.window = "register";
       this.regElem.focusUsername();
     }, "Register");
 
-    this.regElem = new LoginWindow(() => {
-      console.log("attemt to log in");
+    this.regElem = new LoginWindow(async (username: string, password: string) => {
+      let res = await post("register", {body: {
+        username,
+        password
+      }});
+      console.log(res);
+      this.regElem.clear();
     }, "Register", () => {
       this.window = "login";
 
       this.loginElem.focusUsername();
-    }, "Login");
+    }, "Login", false);
 
 
     this.footContainer = ce("login-panel-foot-container");

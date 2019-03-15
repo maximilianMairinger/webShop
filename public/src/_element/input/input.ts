@@ -1,9 +1,11 @@
 import Element from "./../element";
+import delay from "../../lib/delay/delay";
 
 export default class Input extends Element {
   private placeholder: HTMLElement;
   private input: HTMLInputElement;
   private isUp: boolean = false;
+  private isFocused: boolean = false;
   constructor(placeholder: string = "", type: "password" | "text" = "text", public submitCallback?: Function, value?: any) {
     super();
 
@@ -35,6 +37,13 @@ export default class Input extends Element {
       }
     });
 
+    this.on("focus", () => {
+      this.isFocused = true;
+    });
+    this.on("blur", () => {
+      this.isFocused = false;
+    });
+
 
     this.sra(this.placeholder, this.input);
 
@@ -62,10 +71,9 @@ export default class Input extends Element {
   public set value(to: any) {
     this.input.value = to;
     this.alignPlaceHolder();
-    this.placeholder.css({margin: "-1.2em 0", fontSize: ".8em"});
   }
   private alignPlaceHolder() {
-    if (this.value === "") this.placeHolderDown("css");
+    if (this.value === "" && !this.isFocused) this.placeHolderDown("css");
     else this.placeHolderUp("css");
   }
   private placeHolderUp(func: "anim" | "css" = "anim") {
@@ -75,6 +83,7 @@ export default class Input extends Element {
     }
   }
   private placeHolderDown(func: "anim" | "css" = "anim") {
+    console.log(this.isUp);
     if (this.isUp) {
       this.placeholder[func]({marginLeft: "13px", marginTop: "10px", fontSize: "1em"});
       this.isUp = false;

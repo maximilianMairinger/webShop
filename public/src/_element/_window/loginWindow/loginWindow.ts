@@ -8,7 +8,7 @@ export default class LoginWindow extends Window {
   private passwordInput: Input;
   private submitButton: Button;
   private changeButton: Button;
-  constructor(public submitCallback: Function, heading: string, changePls: Function, chnageBtnTxt: string) {
+  constructor(public submitCallback: Function, heading: string, changePls: Function, chnageBtnTxt: string, autoFill: boolean = true) {
     super();
     this.spellcheck = false;
 
@@ -22,7 +22,7 @@ export default class LoginWindow extends Window {
     };
 
     this.usernameInput = new Input("Username", "text", cb);
-    if (localStorage.username !== undefined) this.usernameInput.value = localStorage.username;
+    if (autoFill) if (localStorage.username !== undefined) this.usernameInput.value = localStorage.username;
 
     this.passwordInput = new Input("Password", "password", cb);
 
@@ -36,6 +36,10 @@ export default class LoginWindow extends Window {
     this.on("keydown", (e) => {
       if (e.code === "Escape") this.blur();
     });
+  }
+  public clear() {
+    this.usernameInput.value = "";
+    this.passwordInput.value = "";
   }
   public set username(to: string) {
     this.usernameInput.value = to;
