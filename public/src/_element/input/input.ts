@@ -1,5 +1,4 @@
 import Element from "./../element";
-import delay from "../../lib/delay/delay";
 
 export default class Input extends Element {
   private placeholder: HTMLElement;
@@ -83,7 +82,6 @@ export default class Input extends Element {
     }
   }
   private placeHolderDown(func: "anim" | "css" = "anim") {
-    console.log(this.isUp);
     if (this.isUp) {
       this.placeholder[func]({marginLeft: "13px", marginTop: "10px", fontSize: "1em"});
       this.isUp = false;
