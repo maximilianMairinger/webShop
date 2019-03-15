@@ -1,5 +1,10 @@
 import Notification from "./../../_element/notification/notification";
 import NotificationQueue from "./../../_element/notificationQueue/notificationQueue";
+import delay from "../delay/delay";
+
+function fc(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 export default class Notifier {
   public static queue = new NotificationQueue();
@@ -71,16 +76,21 @@ export default class Notifier {
   public static msg(type: "information" | "success" | "error", title: string, text: string): Notification;
   public static msg(type: "information" | "success" | "error", defaultTitle: boolean, text: string): Notification;
   public static msg(type: "information" | "success" | "error", title_text_defaultTitle: string | boolean, text?: string): Notification {
+    let noti: Notification;
     if (text === undefined)
-      return this.queue.appendNotification(
+      noti = this.queue.appendNotification(
         //@ts-ignore
         new Notification(title_text_defaultTitle, "", type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()}));
     else if (typeof title_text_defaultTitle === "string")
-      return this.queue.appendNotification(
+      noti = this.queue.appendNotification(
         new Notification(title_text_defaultTitle, text, type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()}));
     else if (typeof title_text_defaultTitle === "boolean") {
-      let noti = new Notification(type, text, type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()})
-      return this.queue.appendNotification(noti);
+      noti = this.queue.appendNotification(new Notification(fc(type), text, type, (p) => {this.queue.closeNotification(p)}, () => {this.queue.closeAllNotifications()}));
     }
+    (async () => {
+      await delay(5000);
+      noti.close();
+    })();
+    return noti;
   }
 }

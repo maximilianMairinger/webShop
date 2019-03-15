@@ -2,6 +2,7 @@ import Page from "./../page";
 import LoginWindow from "./../../../_window/loginWindow/loginWindow";
 import Footer from "./../../../drifter/drifter";
 import post from "../../../../lib/post/post";
+import Notifier from "../../../../lib/notifier/notifier";
 
 
 
@@ -10,40 +11,41 @@ export default class loginPage extends Page {
   private foot: Footer;
 
   private loginElem: LoginWindow;
-  private regElem: LoginWindow;
-  constructor(public logedInCb: Function, startWindow: "register" | "login" = "login") {
+
+  private currentWindow: "register" | "login" = "login";
+  constructor(public logedInCb: Function) {
     super();
     this.loginElem = new LoginWindow(async (username: string, password: string) => {
-      let res = await post("auth", {body: {
+      let res = await post(this.currentWindow === "register" ? "register" : "auth", {body: {
         username,
         password
       }});
-      console.log(res)
-
+      if (!res.suc) {
+        if (this.currentWindow === "register") {
+          Notifier.error(true, "That did not work. It seems like someone else has got this username already.");
+        }
+        else {
+          Notifier.log(true, "Your username of password is not correct.");
+        }
+      }
     }, "Login", () => {
-      this.window = "register";
-      this.regElem.focusUsername();
+      let register = this.currentWindow === "login";
+      this.currentWindow = !register ? "login" : "register";
+      if (register) {
+        this.loginElem.heading = "Register";
+        this.loginElem.chnageBtnTxt = "Login";
+      }
+      else {
+        this.loginElem.heading = "Login";
+        this.loginElem.chnageBtnTxt = "Register";
+      }
     }, "Register");
-
-    this.regElem = new LoginWindow(async (username: string, password: string) => {
-      let res = await post("register", {body: {
-        username,
-        password
-      }});
-      console.log(res);
-      this.regElem.clear();
-    }, "Register", () => {
-      this.window = "login";
-
-      this.loginElem.focusUsername();
-    }, "Login", false);
 
 
     this.footContainer = ce("login-panel-foot-container");
 
-    this.sra(this.footContainer, this.loginElem, this.regElem);
+    this.sra(this.footContainer, this.loginElem);
 
-    this.window = startWindow;
 
 
 
@@ -53,16 +55,6 @@ export default class loginPage extends Page {
       this.footContainer.apd(this.foot);
       this.foot.start();
     });
-  }
-  public set window(to: "register" | "login") {
-    if (to === "register") {
-      this.regElem.show();
-      this.loginElem.hide();
-    }
-    else {
-      this.loginElem.show();
-      this.regElem.hide();
-    }
   }
   protected activationCallback(active: boolean): void {
     this.loginElem.focusUsername();
