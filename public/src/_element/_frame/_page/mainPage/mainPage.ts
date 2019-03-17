@@ -71,8 +71,8 @@ export default class loginPage extends Page {
     this.loginElem.focusUsername();
   }
   stl() {
-    return super.stl() + require('./loginPage.css').toString();
+    return super.stl() + require('./mainPage.css').toString();
   }
 }
 
-window.customElements.define('c-login-page', loginPage);
+window.customElements.define('c-main-page', loginPage);

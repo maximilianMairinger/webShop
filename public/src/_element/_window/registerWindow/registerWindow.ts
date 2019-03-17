@@ -1,14 +1,18 @@
 import Window from "./../window";
 import Input from "./../../input/input";
 import Button from "./../../_button/_rippleButton/blockButton/blockButton";
+import Notifier from "../../../lib/notifier/notifier";
 
-export default class LoginWindow extends Window {
+export default class RegisterWindow extends Window {
   private headingElem: HTMLElement;
   private usernameInput: Input;
   private passwordInput: Input;
+  private emailInput: Input;
+  private nameInput: Input;
+
   private submitButton: Button;
   private changeButton: Button;
-  constructor(public submitCallback?: Function, public changePls?: Function, autoFill: boolean = true) {
+  constructor(public submitCallback?: Function, public changePls?: Function) {
     super();
     this.spellcheck = false;
 
@@ -16,25 +20,29 @@ export default class LoginWindow extends Window {
     this.headingElem = dc("login-window-heading");
 
     let cb = () => {
-      if (this.submitCallback !== undefined) this.submitCallback(this.usernameInput.value, this.passwordInput.value);
-      localStorage.username = this.usernameInput.value;
+      if (!(this.usernameInput.value && this.passwordInput.value && this.emailInput.value && this.nameInput.value)) Notifier.log("Missing Information.");
+      else if (this.submitCallback !== undefined) this.submitCallback(this.usernameInput.value, this.passwordInput.value, this.emailInput.value, this.nameInput.value);
     };
 
     this.usernameInput = new Input("Username", "text", cb);
-    if (autoFill) if (localStorage.username !== undefined) this.usernameInput.value = localStorage.username;
 
     this.passwordInput = new Input("Password", "password", cb);
+
+    this.emailInput = new Input("Email", "text", cb);
+
+    this.nameInput = new Input("Full name", "text", cb);
+
 
     this.submitButton = new Button("", cb);
 
     this.changeButton = new Button("", () => {if (this.changePls !== undefined) this.changePls()});
     this.changeButton.addClass("right");
 
-    this.chnageBtnTxt = "Register";
+    this.chnageBtnTxt = "Login";
 
-    this.heading = "Login";
+    this.heading = "Register";
 
-    this.sra(this.headingElem, this.usernameInput, this.passwordInput, this.submitButton, this.changeButton);
+    this.sra(this.headingElem, this.usernameInput, this.passwordInput, this.emailInput, this.nameInput, this.submitButton, this.changeButton);
 
     this.on("keydown", (e) => {
       if (e.code === "Escape") this.blur();
@@ -74,8 +82,8 @@ export default class LoginWindow extends Window {
     return this.changeButton.text;
   }
   stl() {
-    return super.stl() + require('./loginWindow.css').toString();
+    return super.stl() + require('./registerWindow.css').toString();
   }
 }
 
-window.customElements.define('c-login-window', LoginWindow);
+window.customElements.define('c-register-window', RegisterWindow);

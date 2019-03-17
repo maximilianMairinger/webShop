@@ -21,29 +21,11 @@ class InvalidInputError extends Error {
 }
 
 class User {
-  constructor(name_usr, pw) {
-    if (typeof name_usr === "object") {
-      this.username = name_usr.username;
-      this.password = name_usr.password;
-    }
-    else {
-      this.username = name_usr;
-      this.password = pw;
-    }
-  }
-  set username(to) {
-    if (to !== undefined) this._username = to;
-    else throw new InvalidInputError();
-  }
-  get username() {
-    return this._username;
-  }
-  set password(to) {
-    if (to !== undefined) this._password = to;
-    else throw new InvalidInputError();
-  }
-  get password() {
-    return this._password;
+  constructor(usrData) {
+    this.username = usrData.username;
+    this.password = usrData.password;
+    this.email = usrData.email;
+    this.fullName = usrData.fullName;
   }
   check(usr) {
     return (this.username === usr.username && this.password === usr.password);
