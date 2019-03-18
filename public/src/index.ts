@@ -33,8 +33,7 @@ async function init() {
   // });
   //testing
   window.addEventListener("keydown", async (e) => {
-    if (e.code === "KeyM") Notifier.error("sasd");
-    else if (e.shiftKey && e.code === "KeyK") {
+    if (e.shiftKey && e.code === "KeyK") {
       Notifier.queue.closeAllNotifications();
     }
     else if (e.code === "KeyK") {

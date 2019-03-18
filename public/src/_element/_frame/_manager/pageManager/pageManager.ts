@@ -16,9 +16,12 @@ export default class PageManager extends Manager {
     const impMap = new ImportanceMap<() => Promise<object>>(
       {key: new Import<string>("login", 1, (Login) => {
         return new Login(() => {
-          console.log("logged in");
+          this.page = "main";
         });
       }), val: () => {return import("./../../_page/loginPage/loginPage")}},
+      {key: new Import<string>("main", 1, (Main) => {
+        return new Main("newArticle");
+      }), val: () => {return import("./../../_page/mainPage/mainPage")}},
     );
 
     const load = lazyLoad(impMap);

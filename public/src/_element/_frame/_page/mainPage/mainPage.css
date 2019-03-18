@@ -1,36 +1,39 @@
 :host {
-  min-height: 150mm;
+  position: relative;
+}
+c-nav {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 25%;
+  min-width: 300px;
+  z-index: 3;
+  background: white;
+}
+c-page {
+  overflow: auto;
+  height: 100%;
+  display: block;
 }
 
-c-drifter {
+main-page-nav-open-selector {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 10%;
+  z-index: 2;
+}
+
+main-page-overlay {
+  background: rgba(0,0,0,.24);
   width: 100%;
   height: 100%;
-}
-login-panel-foot-container {
-  background: rgba(0,0,0,.05);
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 70mm;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-}
-
-
-c-login-window {
-  min-width: 300px;
-  min-height: 75mm;
-  position: absolute;
-  right: 20%;
-  bottom: 30mm;
-}
-
-c-register-window {
-  min-width: 300px;
-  min-height: 75mm;
-  position: absolute;
-  right: 20%;
-  bottom: 30mm;
   display: none;
-  overflow-y: auto;
+  z-index: 2;
+}
+
+c-panel-manager.small {
+  position: absolute;
+  width: 100%;
 }
