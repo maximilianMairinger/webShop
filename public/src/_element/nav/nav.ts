@@ -5,15 +5,15 @@ import PageOptionsElement from "./../_button/_rippleButton/pageOptionElement/pag
 export default class Nav extends Element {
   private options: pageOptions;
 
-  constructor(public openPanel?: (panel: "overview" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "langauge" | "theme" | "sign_out" | "feedback") => void) {
+  constructor(public openPanel?: (panel: string) => void) {
     super();
     this.tabIndex = 0;
 
-    let switchPanelFunc = (panelName: "overview" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "langauge" | "theme" | "sign_out" | "feedback") => {if(this.openPanel !== undefined) this.openPanel(panelName);};
+    let switchPanelFunc = (panelName: string) => {if(this.openPanel !== undefined) this.openPanel(panelName);};
 
     this.options = new pageOptions();
 
-    this.options.elements = [new PageOptionsElement("overview", "Overview", () => {switchPanelFunc("overview")})]
+    this.options.elements = [new PageOptionsElement("Neuer Artikel", () => {switchPanelFunc("newArticle")})]
 
 
     this.sra(this.options);

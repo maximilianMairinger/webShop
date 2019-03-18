@@ -70,7 +70,9 @@ export default class Main extends Page {
     });
 
 
-    this.hotkeyIndex["Digit1"] = "overview";
+    this.hotkeyIndex["Digit1"] = "shop";
+    this.hotkeyIndex["Digit2"] = "newArticle";
+
 
     this.nav.activateOption(panelName);
 

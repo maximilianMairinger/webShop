@@ -5,7 +5,7 @@ import delay from "./../../../../lib/delay/delay"
 export default class PageOptionsElement extends RippleButton {
   private textElem: HTMLElement;
   private _isActive: boolean = false;
-  constructor(public id: string, text?: string, callback?: Function) {
+  constructor(text?: string, callback?: Function) {
     super(async (e) => {
       e.prevFocusActiveOption = "PageOptionsElement";
       //Easter egg

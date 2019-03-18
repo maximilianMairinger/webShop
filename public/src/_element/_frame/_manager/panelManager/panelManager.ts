@@ -30,7 +30,6 @@ export default class PanelManager extends Manager {
   }
   public async setPanel(to: string) {
     this._currentPanelName = to;
-    console.log(to)
     this.swapFrame(await this.map.get(to));
   }
   public getPanel(): string {

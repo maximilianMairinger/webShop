@@ -25,4 +25,4 @@ export default class FeedbackWindow extends Window {
     return super.stl() + require('./newArticleWindow.css').toString();
   }
 }
-window.customElements.define('c-feedback-window', FeedbackWindow);
+window.customElements.define('c-new-article-window', FeedbackWindow);

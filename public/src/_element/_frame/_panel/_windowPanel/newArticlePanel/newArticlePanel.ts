@@ -11,4 +11,4 @@ export default class FeedbackPanel extends WindowPanel {
     return super.stl() + require('./newArticlePanel.css').toString();
   }
 }
-window.customElements.define('c-feedback-panel', FeedbackPanel);
+window.customElements.define('c-new-article-panel', FeedbackPanel);
