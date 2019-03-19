@@ -79,12 +79,14 @@ export default class Input extends Element {
     if (!this.isUp) {
       this.placeholder[func]({marginTop: "-1.2em", marginLeft: 0, fontSize: ".8em"});
       this.isUp = true;
+      this.placeholder.css("cursor", "auto");
     }
   }
   private placeHolderDown(func: "anim" | "css" = "anim") {
     if (this.isUp) {
       this.placeholder[func]({marginLeft: "13px", marginTop: "10px", fontSize: "1em"});
       this.isUp = false;
+      this.placeholder.css("cursor", "text");
     }
   }
   stl() {

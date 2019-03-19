@@ -1,24 +1,25 @@
 :host {
+  padding: 50px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  position: relative;
 }
 
-report-a-bug-text {
-  text-align: center;
-  width: 100%;
+c-upload {
+  width: 150px;
+  height: 150px;
   display: block;
-  margin-top: 25px;
+  position: relative;
+  margin-bottom: 15px;
 }
 
-text-wrapper {
-  flex-grow: 1;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 20px;
+c-input {
+  margin: 15px 0;
 }
 
 textarea {
+  margin-top: 15px;
   box-sizing: border-box;
   resize: none;
   width: 100%;
@@ -30,13 +31,9 @@ textarea {
   font-size: 14px;
   transition: .2s;
   border: 1px solid rgba(0,0,0,.35);
+  height: 100px;
 }
 
 textarea:focus {
   border: 1px solid rgba(0,0,0,.7);
-}
-
-c-block-button {
-  margin-right: 20px;
-  margin-bottom: 20px;
 }

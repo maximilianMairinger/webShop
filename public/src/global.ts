@@ -144,6 +144,22 @@ p.removeClass = function(...className: string[]) {
   return this;
 }
 
+p.hasClass = function(...className: string[]) {
+  let has = true;
+  className.forEach((cls) => {
+    if (!this.classList.contains(cls)) has = false;
+  });
+  return has
+}
+
+p.toggleClass = function(...className: string[]) {
+  className.forEach((cls) => {
+    if (this.hasClass(cls)) this.removeClass(cls);
+    else this.addClass(cls);
+  });
+  return this
+}
+
 p.apd = function(...elems: Array<HTMLElement | string>) {
   elems.forEach((e) => {
     if (e instanceof HTMLElement) this.append(e);
@@ -220,49 +236,61 @@ export class NodeLs<T extends HTMLElement = HTMLElement> extends Array<T> implem
       this[i].anim(frame, options);
     }
   }
-  on(event: string, callback: Function): NodeLs {
+  on(event: string, callback: Function): this {
     this.exec("on", arguments);
     return this;
   }
-  show(): NodeLs {
+  show(): this {
     this.exec("show", arguments);
     return this;
   }
-  removeClass(className: string): NodeLs {
+  removeClass(className: string): this {
     this.exec("removeClass", arguments);
     return this;
   }
-  apd(...elems: HTMLElement[]): NodeLs {
+  apd(...elems: HTMLElement[]): this {
     this.exec("apd", arguments);
     return this;
   }
-  emptyNodes(): NodeLs {
+  emptyNodes(): this {
     this.exec("empty", arguments);
     return this;
   }
-  hide(): NodeLs {
+  hide(): this {
     this.exec("hide", arguments);
     return this;
   }
-  css(key_css: string | object, val?: string): NodeLs {
+  css(key_css: string | object, val?: string): this {
     this.exec("css", arguments);
     return this;
   }
   childs(selector: string = "*"): NodeLs<HTMLElement> {
     let ls = new NodeLs();
     this.forEach((e) => {
-      ls.push(...e.childs(selector));
+      ls.add(...e.childs(selector));
     });
     return ls;
   }
-  addClass(className: string): NodeLs {
+  addClass(...classNames: string[]): this {
     this.exec("addClass", arguments);
     return this;
   }
-  off(): NodeLs {
+  hasClass(...classNames: string[]): boolean {
+    let has = true;
+    this.forEach((e) => {
+      if (!e.hasClass(...classNames)) has = false;
+    });
+    return has
+  }
+  toggleClass(...classNames: string[]): this {
+    this.exec("toggleClass", arguments);
+    return this
+  }
+  off(): this {
     this.exec("off", arguments);
     return this;
   }
+
   set html(to: string) {
     this.forEach((e) => {
       e.html = to;

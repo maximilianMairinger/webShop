@@ -1,24 +1,25 @@
 import Window from "./../window";
-import BlockButton from "./../../_button/_rippleButton/blockButton/blockButton";
+import Input from "../../input/input";
+import Upload from "../../upload/upload";
 
 export default class FeedbackWindow extends Window {
-  private textElem: HTMLElement;
-  private textArea: HTMLElement;
-  private submit: BlockButton;
+  private nameIn: Input;
+  private description: HTMLTextAreaElement;
+  private imgIn: Upload;
+  private weight: Input;
+  private stock: Input;
+  private price: Input;
   constructor() {
-    super("#AB172A", "top");
-    this.textElem = ce("report-a-bug-text");
-    this.textArea = ce("textarea");
-    let wrapper = ce("text-wrapper");
+    super("#1620aa", "top");
+    this.imgIn = new Upload("img");
+    this.nameIn = new Input("Name");
+    this.weight = new Input("Weight");
+    this.stock = new Input("Stock");
+    this.price = new Input("Price");
+    this.description = ce("textarea");
 
-    this.textElem.html = "report_a_bug";
 
-    this.submit = new BlockButton("",() => {console.log("btn pressed")});
-    this.submit.text = "submit";
-
-    this.sra(this.textElem, wrapper,this.submit);
-    wrapper.apd(this.textArea);
-
+    this.sra(this.imgIn, this.nameIn, this.price, this.weight, this.stock, this.description);
   }
 
   stl() {

@@ -240,27 +240,32 @@ interface HTMLElement {
 	/**
 	 * Adds cssClass
  	 */
-	addClass(...className: string[]): HTMLElement;
+	addClass(...className: string[]): this;
 	/**
 	 * Removes cssClass
  	 */
-	removeClass(...className: string[]): HTMLElement;
+	removeClass(...className: string[]): this;
+	//JQuerylike
+	hasClass(...classNames: string[]): boolean;
+	//JQuerylike
+	toggleClass(...classNames: string[]): this;
+
 	/**
 	 * Appends given elems
  	 */
-	apd(...elems: Array<HTMLElement | string>): HTMLElement;
+	apd(...elems: Array<HTMLElement | string>): this;
 	/**
 	 * Empties the node so that no elements are inside
  	 */
-	emptyNodes(): HTMLElement;
+	emptyNodes(): this;
 	/**
 	 * Hides elem
  	 */
-	hide(): HTMLElement;
+	hide(): this;
 	/**
 	 * Shows elem
  	 */
-	show(): HTMLElement;
+	show(): this;
 	/**
 	 * Gets children matching given css-selector
 	 * @param selector css-selector filter (defaults to "*")
@@ -297,7 +302,7 @@ interface HTMLElement {
 	/**
 	 * ParentNode node
  	 */
-	readonly parent: HTMLElement;
+	readonly parent: this;
 	/**
 	 * alias for innerHTML
  	 */
@@ -316,44 +321,48 @@ interface GenericNodeLs<T extends HTMLElement = HTMLElement> extends Array<T> {
 	/**
 	 * addEventListener alias
  	 */
-	on(event: string, callback: Function): GenericNodeLs;
+	on(event: string, callback: Function): this;
 	/**
 	 * removeEventListener alias
  	 */
-	off(...a: any): GenericNodeLs;
+	off(...a: any): this;
 	/**
 	 * JQuery like implementation
  	 */
-	css(key_css: string | object, val?: string): GenericNodeLs;
+	css(key_css: string | object, val?: string): this;
 	/**
 	 * Adds cssClass
  	 */
-	addClass(...className: string[]): GenericNodeLs;
+	addClass(...className: string[]): this;
 	/**
 	 * Removes cssClass
 	 */
-	removeClass(...className: string[]): GenericNodeLs;
+	removeClass(...className: string[]): this;
+	//JQuerylike
+	hasClass(...classNames: string[]): boolean;
+	//JQuerylike
+	toggleClass(...classNames: string[]): this;
 	/**
  	 * Appends given elems
    */
-	apd(...elems: Array<HTMLElement | string>): GenericNodeLs;
+	apd(...elems: Array<HTMLElement | string>): this;
 	/**
 	 * Empties the node so that no elements are inside
  	 */
-	emptyNodes(): GenericNodeLs;
+	emptyNodes(): this;
 	/**
 	 * Hides elem
  	 */
-	hide(): GenericNodeLs;
+	hide(): this;
 	/**
 	 * Shows elem
  	 */
-	show(): GenericNodeLs;
+	show(): this;
 	/**
 	 * Gets children matching given css-selector
 	 * @param selector css-selector filter (defaults to "*")
  	 */
-	childs(selector: string): GenericNodeLs<HTMLElement>;
+	childs(selector?: string): GenericNodeLs<HTMLElement>;
 	/**
 	 * alias for innerHTML
  	 */

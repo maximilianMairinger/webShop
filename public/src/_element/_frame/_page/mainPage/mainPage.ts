@@ -114,7 +114,7 @@ export default class Main extends Page {
     if (this.active) {
       if (!this.inResizeAnimation) {
         this.inResizeAnimation = true;
-        let sw = this.width < 600;
+        let sw = this.width < 800;
         if (sw !== this.swapableNav) {
           if (!sw) this.swapableNav = sw;
           await Promise.all([

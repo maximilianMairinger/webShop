@@ -13,7 +13,7 @@ export default class Nav extends Element {
 
     this.options = new pageOptions();
 
-    this.options.elements = [new PageOptionsElement("Neuer Artikel", () => {switchPanelFunc("newArticle")})]
+    this.options.elements = [new PageOptionsElement("New Article", () => {switchPanelFunc("newArticle")})]
 
 
     this.sra(this.options);
