@@ -14,7 +14,7 @@ export default class PanelManager extends Manager {
 
     const impMap = new ImportanceMap<() => Promise<any>>(
       {key: new Import<string>("newArticle", 1, (Overview) => {
-        return new Overview();
+        return new Overview(cb);
       }), val: () => import("./../../_panel/_windowPanel/newArticlePanel/newArticlePanel")},
     );
 

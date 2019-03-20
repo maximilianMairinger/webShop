@@ -9,14 +9,18 @@ export default class FeedbackWindow extends Window {
   private weight: Input;
   private stock: Input;
   private price: Input;
-  constructor() {
+
+
+  constructor(public submitCb?: Function) {
     super("#1620aa", "top");
     this.imgIn = new Upload("img");
-    this.nameIn = new Input("Name");
-    this.weight = new Input("Weight");
-    this.stock = new Input("Stock");
-    this.price = new Input("Price");
+    this.nameIn = new Input("Name", "text", submitCb);
+    this.weight = new Input("Weight", "number", submitCb);
+    this.stock = new Input("Stock", "number", submitCb);
+    this.price = new Input("Price", "number", submitCb);
     this.description = ce("textarea");
+    this.description.placeholder = "Description";
+
 
 
     this.sra(this.imgIn, this.nameIn, this.price, this.weight, this.stock, this.description);

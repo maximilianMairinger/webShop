@@ -77,6 +77,7 @@ export default class Main extends Page {
     this.nav.activateOption(panelName);
 
     this.on("keydown", (e) => {
+      if (e.preventHotkey) return;
       for(let digit in this.hotkeyIndex) {
         if (digit === e.code) this.setPanel(this.hotkeyIndex[digit]);
       }

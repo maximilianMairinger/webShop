@@ -1,11 +1,18 @@
 import Element from "./../element";
+import { NodeLs } from "../../global";
+
+var emailValidationRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 
 export default class Input extends Element {
   private placeholder: HTMLElement;
   private input: HTMLInputElement;
   private isUp: boolean = false;
   private isFocused: boolean = false;
-  constructor(placeholder: string = "", type: "password" | "text" = "text", public submitCallback?: Function, value?: any) {
+  private allElems: NodeLs;
+
+  private _type: "password" | "text" | "number" | "email";
+  constructor(placeholder: string = "", type: "password" | "text" | "number" | "email" = "text", public submitCallback?: Function, value?: any) {
     super();
 
     this.placeholder = dc("input-placeholder");
@@ -17,19 +24,30 @@ export default class Input extends Element {
     this.input = dc("input");
     this.type = type;
 
+    //Validation
+    this.input.on("blur", (e) => {
+      this.showInvalidation(!this.validate());
+    });
+
     this.input.on("focus", () => {
+      this.showInvalidation(false);
       this.placeHolderUp();
     });
     this.input.on("blur", () => {
       if (this.value === "") this.placeHolderDown();
     });
+
     let alreadyPressed = false;
+
     this.input.on("keydown", ({key}) => {
       if (key === "Enter" && this.submitCallback !== undefined) if (!alreadyPressed){
         alreadyPressed = true;
         this.submitCallback(this.value);
       }
     });
+    this.input.on("keydown", (e) => {
+      e.preventHotkey = "input";
+    })
     this.input.on("keyup", ({key}) => {
       if (key === "Enter") {
         alreadyPressed = false;
@@ -45,6 +63,7 @@ export default class Input extends Element {
 
 
     this.sra(this.placeholder, this.input);
+    this.allElems = new NodeLs(this.placeholder, this.input);
 
     if (value !== undefined) this.value = value;
   }
@@ -54,12 +73,22 @@ export default class Input extends Element {
   public get placeholderText(): string {
     return this.placeholder.html;
   }
-  public set type(to: "password" | "text") {
-    this.input.type = to;
+  public set type(to: "password" | "text" | "number" | "email") {
+    if (to === "password") {
+      this.input.type = to;
+    }
+    else {
+      this.input.type = "text";
+    }
+    this._type = to;
   }
-  public get type(): "password" | "text" {
-    //@ts-ignore
-    return this.input.type;
+  public get type(): "password" | "text" | "number" | "email" {
+    return this._type;
+  }
+  public isValid(emptyAllowed: boolean = true) {
+    let valid = this.validate();
+    if (emptyAllowed) return valid;
+    return this.value !== "" && valid;
   }
   public focus() {
     this.input.focus();
@@ -70,6 +99,16 @@ export default class Input extends Element {
   public set value(to: any) {
     this.input.value = to;
     this.alignPlaceHolder();
+  }
+  private validate() {
+    let valid = true;
+    if (this.type === "number") {
+      valid = !isNaN(Number(this.value));
+    }
+    else if (this.type === "email") {
+      valid = emailValidationRegex.test(this.value.toLowerCase());
+    }
+    return valid;
   }
   private alignPlaceHolder() {
     if (this.value === "" && !this.isFocused) this.placeHolderDown("css");
@@ -87,6 +126,16 @@ export default class Input extends Element {
       this.placeholder[func]({marginLeft: "13px", marginTop: "10px", fontSize: "1em"});
       this.isUp = false;
       this.placeholder.css("cursor", "text");
+    }
+  }
+  private showInvalidation(is: boolean = true) {
+    if (is) {
+      this.title = "Invalid input";
+      this.allElems.addClass("invalid");
+    }
+    else {
+      this.title = "";
+      this.allElems.removeClass("invalid");
     }
   }
   stl() {

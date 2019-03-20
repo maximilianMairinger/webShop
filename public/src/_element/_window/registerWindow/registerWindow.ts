@@ -28,7 +28,7 @@ export default class RegisterWindow extends Window {
 
     this.passwordInput = new Input("Password", "password", cb);
 
-    this.emailInput = new Input("Email", "text", cb);
+    this.emailInput = new Input("Email", "email", cb);
 
     this.nameInput = new Input("Full name", "text", cb);
 

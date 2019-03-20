@@ -29,3 +29,8 @@ input-placeholder {
   -ms-user-select: none;
   user-select: none
 }
+
+.invalid {
+  color: red;
+  border-color: red;
+}
