@@ -22,7 +22,7 @@ export default class loginPage extends Page {
         email,
         fullName
       }});
-      if (!res.suc) Notifier.error(true, "That did not work. It seems like someone else has got this username already.");
+      if (!res.suc) Notifier.error("That did not work.");
       else {
         Notifier.success(true, "You have successfully created an account under the username " + username + ".");
         if (this.logedInCb !== undefined) this.logedInCb()
