@@ -123,6 +123,7 @@ class Article {
     this.price = data.price;
     this.weight = data.weight;
     this.stock = data.stock;
+    this.description = data.description;
   }
   set name(to) {
     if (to) this._name = to;
@@ -151,6 +152,13 @@ class Article {
   }
   get stock() {
     return this._stock;
+  }
+  set description(to) {
+    if (to) this._description = to;
+    else throw new InvalidInputError();
+  }
+  get description() {
+    return this._description;
   }
 }
 
