@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const MC = require('mongodb').MongoClient;
 
 const emailValidator = require("email-validator");
 const isNumber = require('is-number');
@@ -7,15 +8,15 @@ require('xrray')(Array);
 
 const app = express();
 
-app.listen(3001, () => {
-  console.log("listening");
-});
-
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use(express.static("public"));
+
+
+
+
 
 class InvalidInputError extends Error {
   constructor() {
@@ -80,19 +81,24 @@ class UserCollecion extends Array {
       if (e.checkName(usr)) return true;
     });
   }
+  addUser(...usrdata) {
+    usrdata.ea((usr) => {
+      this.add(new User(usr));
+    });
+  }
 }
 
 const users = new UserCollecion();
 
-function auth(req, res) {
+function auth(body, res) {
   res.send(JSON.stringify({
-    suc: users.check(req.body)
+    suc: users.check(body)
   }));
   res.end();
 }
 
-app.post("/auth", (req, res) => {
-  auth(req, res);
+app.post("/auth", ({body}, res) => {
+  auth(body, res);
 });
 
 const badRegister = (res) => {
@@ -102,15 +108,17 @@ const badRegister = (res) => {
   res.end();
 }
 
-app.post("/register", (req, res) => {
-  if (users.checkName(req.body)) return badRegister(res);
+app.post("/register", ({body}, res) => {
+  if (users.checkName(body)) return badRegister(res);
   try {
-    users.add(new User(req.body));
+    users.addUser(body);
+    let {username, password, email, fullName} = body;
+    db.collection("users").insertOne({username, password, email, fullName});
   }
   catch (e) {
     return badRegister(res);
   }
-  auth(req, res);
+  auth(body, res);
   console.log(users);
 });
 
@@ -171,6 +179,11 @@ class ArticleCollecion extends Array {
       if (e.name === artcl.name) return true;
     });
   }
+  addArticle(...artcldata) {
+    artcldata.ea((artcl) => {
+      this.add(new Article(artcl));
+    });
+  }
 }
 
 const articles = new ArticleCollecion();
@@ -183,10 +196,12 @@ const badArticle = (res) => {
 }
 
 
-app.post("/addArticle", (req, res) => {
-  if (articles.exists(req.body)) return badArticle(res);
+app.post("/addArticle", ({body}, res) => {
+  if (articles.exists(body)) return badArticle(res);
   try {
-    articles.add(new Article(req.body));
+    articles.add(new Article(body));
+    let {name, description, price, weight, stock} = body;
+    db.collection("articles").insertOne({name, description, price, weight, stock});
   }
   catch (e) {
     return badArticle(res);
@@ -198,3 +213,28 @@ app.post("/addArticle", (req, res) => {
   res.end();
   console.log(articles);
 });
+
+
+
+let db;
+
+(async () => {
+  db = (await MC.connect("mongodb://127.0.0.1:27017", {useNewUrlParser: true})).db("webshop");
+
+
+  //Setup
+  let dbusrs = await db.collection("users").find().toArray();
+  users.addUser(...dbusrs);
+
+  let dbarticles = await db.collection("articles").find().toArray();
+  articles.addArticle(...dbarticles);
+
+
+
+  console.log(users, articles);
+
+
+  app.listen(3001, () => {
+    console.log("listening on port 3001");
+  });
+})();

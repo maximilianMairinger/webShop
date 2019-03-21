@@ -3,7 +3,7 @@ import NewArticle from "../../../../_window/newArticleWindow/newArticleWindow";
 import post from "../../../../../lib/post/post";
 import Notifier from "../../../../../lib/notifier/notifier";
 
-export default class FeedbackPanel extends WindowPanel {
+export default class NewArticlePanel extends WindowPanel {
   constructor(blurCallback?: Function) {
     super(blurCallback);
     this.window = new NewArticle(async (name, price, weight, stock, description) => {
@@ -21,4 +21,4 @@ export default class FeedbackPanel extends WindowPanel {
     return super.stl() + require('./newArticlePanel.css').toString();
   }
 }
-window.customElements.define('c-new-article-panel', FeedbackPanel);
+window.customElements.define('c-new-article-panel', NewArticlePanel);

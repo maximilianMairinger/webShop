@@ -21,7 +21,6 @@ export default class Main extends Page {
   public animationOptions = {duration: 300, easing: "ease"};
 
 
-  //add Sunday & saturday to types or make given information just numbers (0-6)
   constructor(panelName: string = "newArticle") {
     super();
 
