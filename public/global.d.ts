@@ -6,6 +6,7 @@ interface Promise<T> {
 
 //@ts-ignore
 declare let global: any;
+declare let log: (message?: any, ...optionalParams: any[]) => void;
 
 declare const dc: {
 	<K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions) : HTMLElementTagNameMap[K];
@@ -227,7 +228,7 @@ interface HTMLElement {
 	/**
 	 * addEventListener alias
  	 */
-  on(event: string, callback: Function, ...options: object[]): void;
+	 on<K extends keyof HTMLElementEventMap>(type: K, listener: (e?: any) => any, options?: boolean | AddEventListenerOptions): void;
 	/**
 	 * removeEventListener alias
 	 * TODO: corect types
@@ -321,7 +322,7 @@ interface GenericNodeLs<T extends HTMLElement = HTMLElement> extends Array<T> {
 	/**
 	 * addEventListener alias
  	 */
-	on(event: string, callback: Function): this;
+	 on<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 	/**
 	 * removeEventListener alias
  	 */

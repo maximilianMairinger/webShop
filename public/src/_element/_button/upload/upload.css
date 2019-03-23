@@ -1,17 +1,9 @@
-upload-input {
+upload-interactive {
   cursor: pointer;
-  box-sizing: border-box;
   width: 100%;
   height: 100%;
-  position: absolute;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  border: 2px dashed black;
   transition: .2s ease;
-  background: rgba(0,0,0,.02);
+  position: absolute;
 }
 
 input {
@@ -19,20 +11,58 @@ input {
 }
 
 
-img {
+.smallimg {
   width: 30px;
   height: 30px;
   transition: .2s ease;
 }
 
-.hov {
-  box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.2);
+.displayimg {
+  display: none;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: cover;
 }
 
-.drg > img {
+.forbiddenExtention {
+  cursor: not-allowed;
+}
+
+upload-display {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 2px dashed black;
+  background: rgba(0,0,0,.02);
+  position: absolute;
+  transition: .2s ease;
+}
+
+upload-cover {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.15);
+  opacity: 0;
+  transition: .2s ease;
+  position: absolute;
+  border-radius: 20px;
+}
+
+.hov > upload-cover {
+  opacity: 1;
+}
+
+.drg > .smallimg {
   transform: translateY(5px);
 }
 
-.foc {
-  background: rgba(0,0,0,.05);
+.foc > upload-cover {
+  opacity: 1;
 }

@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "hammerjs": "^2.0.8",
-    "xrray": "^2.3.4"
+    "xrray": "^2.3.5"
   }
 }

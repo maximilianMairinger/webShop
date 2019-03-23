@@ -1,4 +1,31 @@
 import Button from "./../button";
+import Notifier from "../../../lib/notifier/notifier";
+
+
+function getFileExtention(filename: string): string {
+  let p = ".";
+  if (filename.indexOf(p) !== -1) return filename.split(p).pop();
+  return "";
+}
+
+let imgExtentions = ["jpg", "png", "gif"];
+
+const keywords = {
+  img: imgExtentions,
+  image: imgExtentions,
+};
+
+function matchesExtentionWildcard(ext: string, allowedExtention: string) {
+  let isok = false;
+  for (let key in keywords) {
+    if (allowedExtention === key) {
+      keywords[key].ea((e) => {
+        if (e === ext) isok = true;
+      });
+    }
+  }
+  return isok;
+}
 
 
 export function convertToBase64(file): Promise<string> {
@@ -12,117 +39,115 @@ export function convertToBase64(file): Promise<string> {
 }
 
 export default class Upload extends Button {
-  private input: HTMLElement;
-  private inp: HTMLInputElement;
+  private inputElem: HTMLInputElement;
   private _file: File;
 
   private fileUploadCbs: Function[] = [];
-  constructor(fileUploadCb?: (file: File, base64: string) => any) {
+  constructor(public allowedExtention?: string | string[], fileUploadCb?: (file: File, base64: string) => any) {
     super(() => {
       this.open();
     });
 
-    this.addFileUploadCb(fileUploadCb);
+    this.tabIndex = 0;
+
+    if (fileUploadCb !== undefined) this.addFileUploadCb(fileUploadCb);
 
     let fileUploadFunc = async () => {
       let b = await this.getAsBase64();
-      this.input.css("background-image", b);
-      img.css("display", "none");
+      img.src = b;
+      arrow.css("display", "none");
+      img.show();
+      img.anim({opacity: 1});
       this.fileUploadCbs.ea((f) => {
         f(this.file, b);
       })
     };
 
-    this.inp = ce("input");
-    this.inp.type = "file";
-    this.inp.on("change", () => {
-      this._file = this.inp.files[0];
+    this.inputElem = ce("input");
+    this.inputElem.type = "file";
+    this.inputElem.on("change", () => {
+      this._file = this.inputElem.files[0];
+      fileUploadFunc();
     });
 
 
 
-    this.input = ce("upload-input");
-    this.input.on("mouseover", () => {
-      this.input.addClass("hov");
+    let interactive = ce("upload-interactive");
+    interactive.on("mouseover", () => {
+      display.addClass("hov");
     });
-    this.input.on("mouseout", () => {
-      this.input.removeClass("hov");
+    interactive.on("mouseout", () => {
+      display.removeClass("hov");
     });
-    this.input.on("dragenter", () => {
-      this.input.addClass("drg");
+    interactive.on("dragenter", () => {
+      display.addClass("drg");
     });
-    this.input.on("dragleave", () => {
-      this.input.removeClass("drg");
+    interactive.on("dragleave", (e) => {
+      display.removeClass("drg");
     });
-    this.input.on("focus", () => {
-      this.input.addClass("foc");
+    this.on("focus", () => {
+      log(display)
+      display.addClass("foc");
     });
-    this.input.on("blur", () => {
-      this.input.removeClass("foc");
+    this.on("blur", () => {
+      display.removeClass("foc");
     });
 
+    let extentionNotification = (isok: boolean) => {
+      if (!isok) Notifier.error("This file type is not allowed.");
+    }
+
+    interactive.on("drop", (e) => {
+      e.preventDefault();
+      this._file = e.dataTransfer.files[0];
+      let ext = getFileExtention(this._file.name);
+      if (typeof this.allowedExtention === "string") {
+        debugger;
+        log(matchesExtentionWildcard(ext, this.allowedExtention))
+        extentionNotification(ext === this.allowedExtention || matchesExtentionWildcard(ext, this.allowedExtention));
+      }
+      else if (this.allowedExtention instanceof Array) {
+        let isok = false;
+        this.allowedExtention.ea((e) => {
+          if (ext === e || matchesExtentionWildcard(ext, e)) isok = true;
+        })
+        extentionNotification(isok);
+      }
+      fileUploadFunc();
+    }, false);
+
+    interactive.on("dragover", (e) => {
+      e.preventDefault();
+    }, false);
 
 
+    let display = ce("upload-display");
 
-
-    this.input.on("change", fileUploadFunc);
-
+    let arrow = ce("img");
+    arrow.src = "./assets/drop.svg";
+    arrow.addClass("smallimg");
 
     let img = ce("img");
-    img.src = "./assets/drop.svg";
-    this.input.apd(img);
+    img.addClass("displayimg");
+
+    let cover = ce("upload-cover");
 
 
-    this.input.on("drop", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log(e);
-
-      for (let i = 0; i < 99999999; i++) {
-          console.log("ok");
-      }
-    })
-    this.on("drop", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log(e);
-
-      for (let i = 0; i < 99999999; i++) {
-          console.log("ok");
-      }
-    })
-
-    this.inp.on("drop", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log(e);
-
-      for (let i = 0; i < 99999999; i++) {
-          console.log("ok");
-      }
-    })
-    img.on("drop", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log(e);
-
-      for (let i = 0; i < 99999999; i++) {
-          console.log("ok");
-      }
-    })
+    display.apd(arrow, img, cover);
 
 
-    this.sra(this.input, this.inp);
+
+    this.sra(display, interactive, this.inputElem);
   }
 
   public open() {
-    this.inp.click();
+    this.inputElem.click();
   }
 
-  public addFileUploadCb(cb?: (file: File, base64: string) => any) {
+  public addFileUploadCb(cb: (file: File, base64: string) => any) {
     this.fileUploadCbs.add(cb);
   }
-  public removeFileUploadCb(cb?: (file: File, base64: string) => any) {
+  public removeFileUploadCb(cb: (file: File, base64: string) => any) {
     this.fileUploadCbs.remove(cb);
   }
 

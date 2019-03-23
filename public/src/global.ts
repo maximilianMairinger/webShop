@@ -3,6 +3,7 @@ global.dc = global.ce = (name: string) => {
 };
 
 
+global.log = console.log;
 
 
 let p = HTMLElement.prototype;
