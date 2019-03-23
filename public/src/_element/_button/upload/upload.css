@@ -1,12 +1,5 @@
-input {
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  position: absolute;
+upload-input {
   cursor: pointer;
-}
-
-upload-display {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
@@ -20,6 +13,11 @@ upload-display {
   transition: .2s ease;
   background: rgba(0,0,0,.02);
 }
+
+input {
+  display: none;
+}
+
 
 img {
   width: 30px;

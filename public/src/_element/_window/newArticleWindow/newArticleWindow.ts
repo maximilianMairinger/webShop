@@ -1,6 +1,6 @@
 import Window from "./../window";
 import Input from "../../input/input";
-import Upload from "../../upload/upload";
+import Upload from "../../_button/upload/upload";
 import Button from "../../_button/_rippleButton/blockButton/blockButton";
 
 export default class FeedbackWindow extends Window {
@@ -14,10 +14,10 @@ export default class FeedbackWindow extends Window {
 
   constructor(public submitCb?: Function) {
     super("#1620aa", "top");
-    let cb = () => {
-      if (this.submitCb !== undefined) this.submitCb(this.nameIn.value, this.priceIn.value, this.weightIn.value, this.stockIn.value, this.descriptionIn.value);
+    let cb = async () => {
+      if (this.submitCb !== undefined) this.submitCb(this.nameIn.value, this.priceIn.value, this.weightIn.value, this.stockIn.value, this.descriptionIn.value, await this.imgIn.getAsBase64());
     };
-    this.imgIn = new Upload("img");
+    this.imgIn = new Upload();
     this.nameIn = new Input("Name", "text", cb);
     this.weightIn = new Input("Weight", "number", cb);
     this.stockIn = new Input("Stock", "number", cb);

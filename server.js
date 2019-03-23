@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 const MC = require('mongodb').MongoClient;
 
 const emailValidator = require("email-validator");
@@ -13,8 +15,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use(express.static("public"));
-
-
 
 
 
@@ -119,7 +119,6 @@ app.post("/register", ({body}, res) => {
     return badRegister(res);
   }
   auth(body, res);
-  console.log(users);
 });
 
 
@@ -132,6 +131,7 @@ class Article {
     this.weight = data.weight;
     this.stock = data.stock;
     this.description = data.description;
+    this.picture = data.picture;
   }
   set name(to) {
     if (to) this._name = to;
@@ -168,6 +168,13 @@ class Article {
   get description() {
     return this._description;
   }
+  set picture(to) {
+    if (to) this._picture = to;
+    else throw new InvalidInputError();
+  }
+  get picture() {
+    return this._picture;
+  }
 }
 
 class ArticleCollecion extends Array {
@@ -199,9 +206,9 @@ const badArticle = (res) => {
 app.post("/addArticle", ({body}, res) => {
   if (articles.exists(body)) return badArticle(res);
   try {
-    articles.add(new Article(body));
-    let {name, description, price, weight, stock} = body;
-    db.collection("articles").insertOne({name, description, price, weight, stock});
+    articles.addArticle(body);
+    let {name, description, price, weight, stock, picture} = body;
+    db.collection("articles").insertOne({name, description, price, weight, stock, picture});
   }
   catch (e) {
     return badArticle(res);
@@ -213,7 +220,6 @@ app.post("/addArticle", ({body}, res) => {
   res.end();
   console.log(articles);
 });
-
 
 
 let db;
@@ -231,7 +237,6 @@ let db;
 
 
 
-  console.log(users, articles);
 
 
   app.listen(3001, () => {

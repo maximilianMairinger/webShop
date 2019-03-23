@@ -6,10 +6,10 @@ import Notifier from "../../../../../lib/notifier/notifier";
 export default class NewArticlePanel extends WindowPanel {
   constructor(blurCallback?: Function) {
     super(blurCallback);
-    this.window = new NewArticle(async (name, price, weight, stock, description) => {
+    this.window = new NewArticle(async (name, price, weight, stock, description, picture) => {
       let res = await post("addArticle", {
         body: {
-          name, price, weight, stock, description
+          name, price, weight, stock, description, picture
         }
       });
       if (res.suc) Notifier.success(true, "Your Article has successfully been added to the Collection");

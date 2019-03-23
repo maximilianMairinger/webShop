@@ -19,6 +19,17 @@ function formatStyle(prop: string, style: string | number) {
     if (!isNaN(parsed)) return parsed;
     else return style;
   }
+  else if (prop === "background-image") {
+    if (typeof style === "number") {
+      throw "Unexpected style";
+    }
+    else {
+      if (style.substring(0, 3) !== "url(") style = "url(" + style;
+      let lc = style.charAt(style.length-1);
+      if (lc !== ")" && lc !== ";") style += ")";
+    }
+
+  }
   return style;
 }
 
