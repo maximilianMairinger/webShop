@@ -17,7 +17,7 @@ export default class FeedbackWindow extends Window {
     let cb = async () => {
       if (this.submitCb !== undefined) this.submitCb(this.nameIn.value, this.priceIn.value, this.weightIn.value, this.stockIn.value, this.descriptionIn.value, await this.imgIn.getAsBase64());
     };
-    this.imgIn = new Upload(["img", "pdf"]);
+    this.imgIn = new Upload("img");
     this.nameIn = new Input("Name", "text", cb);
     this.weightIn = new Input("Weight", "number", cb);
     this.stockIn = new Input("Stock", "number", cb);

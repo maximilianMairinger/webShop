@@ -8,7 +8,7 @@ function getFileExtention(filename: string): string {
   return "";
 }
 
-let imgExtentions = ["jpg", "png", "gif"];
+let imgExtentions = ["jpg", "png", "gif", "jpeg"];
 
 const keywords = {
   img: imgExtentions,
@@ -55,7 +55,6 @@ export default class Upload extends Button {
     let fileUploadFunc = async () => {
       let ext = getFileExtention(this._file.name);
       if (typeof this.allowedExtention === "string") {
-        log(matchesExtentionWildcard(ext, this.allowedExtention))
         let ok = ext === this.allowedExtention || matchesExtentionWildcard(ext, this.allowedExtention);
         extentionNotification(ok);
         if (!ok) return;
@@ -94,6 +93,7 @@ export default class Upload extends Button {
     this.inputElem = ce("input");
     this.inputElem.type = "file";
     this.inputElem.on("change", () => {
+      if (this.inputElem.files[0] === undefined) return;
       this._file = this.inputElem.files[0];
       fileUploadFunc();
     });

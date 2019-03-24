@@ -25,7 +25,7 @@ function formatStyle(prop: string, style: string | number) {
       throw "Unexpected style";
     }
     else {
-      if (style.substring(0, 3) !== "url(") style = "url(" + style;
+      if (style.substring(0, 4) !== "url(") style = "url(" + style;
       let lc = style.charAt(style.length-1);
       if (lc !== ")" && lc !== ";") style += ")";
     }
