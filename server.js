@@ -218,7 +218,6 @@ app.post("/addArticle", ({body}, res) => {
     suc: true
   }));
   res.end();
-  console.log(articles);
 });
 
 
