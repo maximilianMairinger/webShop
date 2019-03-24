@@ -18,7 +18,7 @@ export default class PanelManager extends Manager {
       }), val: () => import("./../../_panel/_windowPanel/newArticlePanel/newArticlePanel")},
       {key: new Import<string>("shop", 1, (Shop) => {
         return new Shop(cb);
-      }), val: () => import("./../../_panel/_windowPanel/newArticlePanel/newArticlePanel")},
+      }), val: () => import("./../../_panel/shopPanel/shopPanel")},
     );
 
 

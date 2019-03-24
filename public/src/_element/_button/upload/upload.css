@@ -17,13 +17,24 @@ input {
   transition: .2s ease;
 }
 
+img {
+  object-fit: cover;
+}
+
+upload-file-display {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
 .displayimg {
-  display: none;
-  opacity: 0;
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  object-fit: cover;
 }
 
 .forbiddenExtention {

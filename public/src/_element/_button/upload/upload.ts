@@ -28,7 +28,7 @@ function matchesExtentionWildcard(ext: string, allowedExtention: string) {
 }
 
 
-export function convertToBase64(file): Promise<string> {
+export function convertToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -43,7 +43,7 @@ export default class Upload extends Button {
   private _file: File;
 
   private fileUploadCbs: Function[] = [];
-  constructor(public allowedExtention?: string | string[], fileUploadCb?: (file: File, base64: string) => any) {
+  constructor(public allowedExtention?: string | string[], fileUploadCb?: (file?: File, base64?: string) => any) {
     super(() => {
       this.open();
     });
@@ -53,14 +53,42 @@ export default class Upload extends Button {
     if (fileUploadCb !== undefined) this.addFileUploadCb(fileUploadCb);
 
     let fileUploadFunc = async () => {
-      let b = await this.getAsBase64();
-      img.src = b;
+      let ext = getFileExtention(this._file.name);
+      if (typeof this.allowedExtention === "string") {
+        log(matchesExtentionWildcard(ext, this.allowedExtention))
+        let ok = ext === this.allowedExtention || matchesExtentionWildcard(ext, this.allowedExtention);
+        extentionNotification(ok);
+        if (!ok) return;
+      }
+      else if (this.allowedExtention instanceof Array) {
+        let isok = false;
+        this.allowedExtention.ea((e) => {
+          if (ext === e || matchesExtentionWildcard(ext, e)) isok = true;
+        })
+        extentionNotification(isok);
+        if (!isok) return;
+      }
+
       arrow.css("display", "none");
-      img.show();
-      img.anim({opacity: 1});
-      this.fileUploadCbs.ea((f) => {
-        f(this.file, b);
-      })
+
+      if (matchesExtentionWildcard(ext, "img")) {
+        let b = await this.getAsBase64();
+        let img = ce("img");
+        img.addClass("displayimg");
+        img.src = b;
+        filedisplay.inner = img;
+        this.fileUploadCbs.ea((f) => {
+          f(this.file, b);
+        });
+      }
+      else {
+        filedisplay.inner = this.file.name;
+        this.fileUploadCbs.ea((f) => {
+          f(this.file);
+        });
+      }
+
+
     };
 
     this.inputElem = ce("input");
@@ -86,7 +114,6 @@ export default class Upload extends Button {
       display.removeClass("drg");
     });
     this.on("focus", () => {
-      log(display)
       display.addClass("foc");
     });
     this.on("blur", () => {
@@ -100,19 +127,6 @@ export default class Upload extends Button {
     interactive.on("drop", (e) => {
       e.preventDefault();
       this._file = e.dataTransfer.files[0];
-      let ext = getFileExtention(this._file.name);
-      if (typeof this.allowedExtention === "string") {
-        debugger;
-        log(matchesExtentionWildcard(ext, this.allowedExtention))
-        extentionNotification(ext === this.allowedExtention || matchesExtentionWildcard(ext, this.allowedExtention));
-      }
-      else if (this.allowedExtention instanceof Array) {
-        let isok = false;
-        this.allowedExtention.ea((e) => {
-          if (ext === e || matchesExtentionWildcard(ext, e)) isok = true;
-        })
-        extentionNotification(isok);
-      }
       fileUploadFunc();
     }, false);
 
@@ -127,13 +141,12 @@ export default class Upload extends Button {
     arrow.src = "./assets/drop.svg";
     arrow.addClass("smallimg");
 
-    let img = ce("img");
-    img.addClass("displayimg");
+    let filedisplay = ce("upload-file-display");
 
     let cover = ce("upload-cover");
 
 
-    display.apd(arrow, img, cover);
+    display.apd(arrow, filedisplay, cover);
 
 
 
@@ -144,10 +157,10 @@ export default class Upload extends Button {
     this.inputElem.click();
   }
 
-  public addFileUploadCb(cb: (file: File, base64: string) => any) {
+  public addFileUploadCb(cb: (file?: File, base64?: string) => any) {
     this.fileUploadCbs.add(cb);
   }
-  public removeFileUploadCb(cb: (file: File, base64: string) => any) {
+  public removeFileUploadCb(cb: (file?: File, base64?: string) => any) {
     this.fileUploadCbs.remove(cb);
   }
 
