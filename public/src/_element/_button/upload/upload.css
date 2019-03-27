@@ -37,10 +37,6 @@ upload-file-display {
   border-radius: 20px;
 }
 
-.forbiddenExtention {
-  cursor: not-allowed;
-}
-
 upload-display {
   width: 100%;
   height: 100%;
@@ -48,7 +44,6 @@ upload-display {
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  cursor: pointer;
   box-sizing: border-box;
   border: 2px dashed black;
   background: rgba(0,0,0,.02);

@@ -94,7 +94,9 @@ export default class Input extends Element {
     this.input.focus();
   }
   public get value(): any {
-    return this.input.value;
+    let v = this.input.value;
+    if (this.type === "number") Number(v);
+    return v;
   }
   public set value(to: any) {
     this.input.value = to;

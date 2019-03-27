@@ -1,6 +1,6 @@
 import WindowPanel from "./../windowPanel";
 import NewArticle from "../../../../_window/newArticleWindow/newArticleWindow";
-import post from "../../../../../lib/post/post";
+import {post} from "../../../../../lib/ajax/ajax";
 import Notifier from "../../../../../lib/notifier/notifier";
 
 export default class NewArticlePanel extends WindowPanel {

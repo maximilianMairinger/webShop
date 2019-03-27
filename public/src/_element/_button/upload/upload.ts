@@ -8,7 +8,7 @@ function getFileExtention(filename: string): string {
   return "";
 }
 
-let imgExtentions = ["jpg", "png", "gif", "jpeg"];
+let imgExtentions = ["jpg", "png", "gif", "jpeg", "svg"];
 
 const keywords = {
   img: imgExtentions,

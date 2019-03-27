@@ -2,7 +2,7 @@ import Page from "./../page";
 import LoginWindow from "./../../../_window/loginWindow/loginWindow";
 import RegisterWindow from "./../../../_window/registerWindow/registerWindow";
 import Footer from "./../../../drifter/drifter";
-import post from "../../../../lib/post/post";
+import {post} from "../../../../lib/ajax/ajax";
 import Notifier from "../../../../lib/notifier/notifier";
 
 

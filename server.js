@@ -202,6 +202,12 @@ const badArticle = (res) => {
   res.end();
 }
 
+app.get("/articles", async (req, res) => {
+  let articles = await db.collection("articles").find().toArray();
+  res.send(JSON.stringify(articles));
+  res.end();
+})
+
 
 app.post("/addArticle", ({body}, res) => {
   if (articles.exists(body)) return badArticle(res);
