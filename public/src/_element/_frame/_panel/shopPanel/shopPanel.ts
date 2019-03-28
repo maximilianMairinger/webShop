@@ -8,17 +8,20 @@ export default class ShopPanel extends Panel {
   constructor(blurCallback?: Function) {
     super(blurCallback);
 
+    this.sra(this.body);
+    this.fetchArticles();
+  }
+  protected activationCallback(active: boolean): void {
+
+  }
+
+  public fetchArticles() {
     (async () => {
+      this.body.emptyNodes();
       let articles = await get("articles");
       articles = articles.map(data => new Article(data));
       this.body.apd(...articles);
     })();
-
-
-    this.sra(this.body);
-  }
-  protected activationCallback(active: boolean): void {
-
   }
 
   stl() {

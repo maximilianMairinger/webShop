@@ -13,8 +13,10 @@ export default class PanelManager extends Manager {
     let cb = (e) => {if (this.blurCallback !== undefined) this.blurCallback(e)};
 
     const impMap = new ImportanceMap<() => Promise<any>>(
-      {key: new Import<string>("newArticle", 2, (Overview) => {
-        return new Overview(cb);
+      {key: new Import<string>("newArticle", 2, (AddArticlePanel) => {
+        return new AddArticlePanel(cb, async () => {
+          (await this.map.get("shop")).fetchArticles();
+        });
       }), val: () => import("./../../_panel/_windowPanel/newArticlePanel/newArticlePanel")},
       {key: new Import<string>("shop", 1, (Shop) => {
         return new Shop(cb);

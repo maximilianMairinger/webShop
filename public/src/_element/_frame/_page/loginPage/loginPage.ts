@@ -51,10 +51,6 @@ export default class loginPage extends Page {
 
     this.sra(this.footContainer, this.loginElem, this.registerElem);
 
-
-
-
-
     import("./../../../drifter/drifter").then(({default: foot}) => {
       this.foot = new foot();
       this.footContainer.apd(this.foot);

@@ -4,7 +4,7 @@ import {post} from "../../../../../lib/ajax/ajax";
 import Notifier from "../../../../../lib/notifier/notifier";
 
 export default class NewArticlePanel extends WindowPanel {
-  constructor(blurCallback?: Function) {
+  constructor(blurCallback?: Function, public articleAddedCb?: Function) {
     super(blurCallback);
     this.window = new NewArticle(async (name, price, weight, stock, description, picture) => {
       let res;
@@ -14,6 +14,7 @@ export default class NewArticlePanel extends WindowPanel {
             name, price, weight, stock, description, picture
           }
         });
+        if (this.articleAddedCb !== undefined) this.articleAddedCb();
       }
       catch (e) {
         Notifier.error(true, "Network error");
