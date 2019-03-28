@@ -1,8 +1,11 @@
 export async function post(uri: string, {headers: h = {'Content-Type': 'application/json'}, body: b}: PostConf) {
+  let o: any = typeof b === "string" ? JSON.parse(b) : b;
+  if (o.sessKey !== undefined) console.warn("sessKey in post body is not empty.", o);
+  else o.sessKey = localStorage.sessKey || "";
   return await (await fetch(uri, {
     headers: new Headers(h),
     method: "POST",
-    body: typeof b === "object" ? JSON.stringify(b) : b
+    body: JSON.stringify(o)
   })).json();
 };
 

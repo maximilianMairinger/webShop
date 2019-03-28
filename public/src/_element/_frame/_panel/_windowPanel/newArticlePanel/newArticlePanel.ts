@@ -19,6 +19,7 @@ export default class NewArticlePanel extends WindowPanel {
         Notifier.error(true, "Network error");
       }
 
+
       if (res.suc) Notifier.success(true, "Your Article has successfully been added to the Collection");
       else Notifier.error(true, "Ouch, something didnt work there. Try with different data again.");
     });

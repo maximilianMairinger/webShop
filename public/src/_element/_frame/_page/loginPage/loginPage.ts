@@ -24,6 +24,7 @@ export default class loginPage extends Page {
       }});
       if (!res.suc) Notifier.error("That did not work.");
       else {
+        localStorage.sessKey = res.sessKey;
         Notifier.success(true, "You have successfully created an account under the username " + username + ".");
         if (this.logedInCb !== undefined) this.logedInCb()
       }
@@ -37,7 +38,10 @@ export default class loginPage extends Page {
       }});
 
       if (!res.suc) Notifier.log(true, "Your username of password is not correct.");
-      else if (this.logedInCb !== undefined) this.logedInCb();
+      else {
+        localStorage.sessKey = res.sessKey;
+        if (this.logedInCb !== undefined) this.logedInCb();
+      }
     }, () => {
       this.window = "register";
     });

@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
 const MC = require('mongodb').MongoClient;
+const rand = require('generate-key');
 
 const emailValidator = require("email-validator");
 const isNumber = require('is-number');
@@ -72,13 +71,13 @@ class UserCollecion extends Array {
     super(...a);
   }
   check(usr) {
-    return !!this.ea((e) => {
-      if (e.check(usr)) return true;
+    return this.ea((e) => {
+      if (e.check(usr)) return e;
     });
   }
   checkName(usr) {
-    return !!this.ea((e) => {
-      if (e.checkName(usr)) return true;
+    return this.ea((e) => {
+      if (e.checkName(usr)) return e;
     });
   }
   addUser(...usrdata) {
@@ -86,13 +85,31 @@ class UserCollecion extends Array {
       this.add(new User(usr));
     });
   }
+  getSession(session) {
+    if (session === undefined) return false;
+    return this.ea((usr) => {
+      if (usr.sessKey === session) return usr;
+    });
+  }
 }
 
 const users = new UserCollecion();
 
 function auth(body, res) {
-  res.send(JSON.stringify({
-    suc: users.check(body)
+  let usr = users.check(body);
+  if (usr) {
+    let sessKey = rand.generateKey();
+    usr.sessKey = sessKey;
+    setTimeout(() => {
+      sessions.delete(usr);
+    }, 1000000000);
+    res.send(JSON.stringify({
+      suc: true,
+      sessKey
+    }));
+  }
+  else res.send(JSON.stringify({
+    suc: false
   }));
   res.end();
 }
@@ -132,6 +149,7 @@ class Article {
     this.stock = data.stock;
     this.description = data.description;
     this.picture = data.picture;
+    this.creator = data.creator;
   }
   set name(to) {
     if (to) this._name = to;
@@ -195,7 +213,7 @@ class ArticleCollecion extends Array {
 
 const articles = new ArticleCollecion();
 
-const badArticle = (res) => {
+const badRequest = (res) => {
   res.send(JSON.stringify({
     suc: false
   }));
@@ -210,14 +228,17 @@ app.get("/articles", async (req, res) => {
 
 
 app.post("/addArticle", ({body}, res) => {
-  if (articles.exists(body)) return badArticle(res);
+  let usr = users.getSession(body.sessKey);
+  if (usr === undefined) return badRequest(res);
+  if (articles.exists(body)) return badRequest(res);
   try {
+    body.creator = usr.username;
     articles.addArticle(body);
-    let {name, description, price, weight, stock, picture} = body;
-    db.collection("articles").insertOne({name, description, price, weight, stock, picture});
+    let {name, description, price, weight, stock, picture, creator} = body;
+    db.collection("articles").insertOne({name, description, price, weight, stock, picture, creator});
   }
   catch (e) {
-    return badArticle(res);
+    return badRequest(res);
   }
 
   res.send(JSON.stringify({
