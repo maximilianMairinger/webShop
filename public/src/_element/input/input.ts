@@ -105,7 +105,7 @@ export default class Input extends Element {
   private validate() {
     let valid = true;
     if (this.type === "number") {
-      valid = !isNaN(Number(this.value));
+      valid = !isNaN(parseFloat(this.value));
     }
     else if (this.type === "email") {
       valid = emailValidationRegex.test(this.value.toLowerCase());

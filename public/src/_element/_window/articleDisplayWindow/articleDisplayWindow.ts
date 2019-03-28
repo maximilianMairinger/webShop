@@ -4,17 +4,20 @@ import Upload from "../../_button/upload/upload";
 import Button from "../../_button/_rippleButton/blockButton/blockButton";
 
 export default class ArticleDisplayWindow extends Window {
-  constructor(article: Article) {
+  constructor({name, stock, description, price, weight, picture}: Article) {
     super();
 
     let img = ce("img");
-    img.src = article.picture;
+    img.src = picture;
 
 
     let body = ce("article-display-body");
+    let fade = ce("article-display-gradient");
+    let text = ce("article-display-text");
+    text.inner = "Name: " + name + "<br>Price: " + price + "<br>Weight: " + weight + "<br>Stock: " + stock + "<br>Description: " + description;
 
 
-    body.apd(img);
+    body.apd(img, fade, text);
     this.sra(body);
   }
 

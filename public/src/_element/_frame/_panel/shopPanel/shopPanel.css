@@ -1,3 +1,10 @@
 shop-panel-body {
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+c-article-display-window {
+  position: relative;
+  margin: 30px 50px;
 }

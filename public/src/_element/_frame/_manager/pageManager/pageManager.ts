@@ -20,7 +20,7 @@ export default class PageManager extends Manager {
         });
       }), val: () => {return import("./../../_page/loginPage/loginPage")}},
       {key: new Import<string>("main", 1, (Main) => {
-        return new Main("newArticle");
+        return new Main("shop");
       }), val: () => {return import("./../../_page/mainPage/mainPage")}},
     );
 

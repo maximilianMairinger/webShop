@@ -31,6 +31,7 @@ function matchesExtentionWildcard(ext: string, allowedExtention: string) {
 export function convertToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
+    if (file === undefined) return resolve("");
     reader.readAsDataURL(file);
     //@ts-ignore
     reader.onload = () => resolve(reader.result);
