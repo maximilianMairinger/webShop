@@ -1,3 +1,7 @@
+// QUESTION: How many db req; when db req and when ram of server (sessions??)
+// QUESTION: Good ieda to check data types and stuff here
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const MC = require('mongodb').MongoClient;
@@ -199,9 +203,9 @@ class ArticleCollecion extends Array {
   constructor(...a) {
     super(...a);
   }
-  exists(artcl) {
-    return !!this.ea((e) => {
-      if (e.name === artcl.name) return true;
+  getByName(name) {
+    return this.ea((e) => {
+      if (e.name === name) return e;
     });
   }
   addArticle(...artcldata) {
@@ -227,15 +231,18 @@ app.get("/articles", async (req, res) => {
 })
 
 
-app.post("/addArticle", ({body}, res) => {
+app.post("/addArticle", async ({body}, res) => {
   let usr = users.getSession(body.sessKey);
   if (usr === undefined) return badRequest(res);
-  if (articles.exists(body)) return badRequest(res);
+  if (articles.getByName(body.name) !== undefined) return badRequest(res);
   try {
     body.creator = usr.username;
     articles.addArticle(body);
     let {name, description, price, weight, stock, picture, creator} = body;
-    db.collection("articles").insertOne({name, description, price, weight, stock, picture, creator});
+    stock = parseFloat(stock); if (isNaN(stock)) return badRequest(res);
+    price = parseFloat(price); if (isNaN(price)) return badRequest(res);
+    weight = parseFloat(weight); if (isNaN(weight)) return badRequest(res);
+    await db.collection("articles").insertOne({name, description, price, weight, stock, picture, creator});
   }
   catch (e) {
     return badRequest(res);
@@ -243,6 +250,52 @@ app.post("/addArticle", ({body}, res) => {
 
   res.send(JSON.stringify({
     suc: true
+  }));
+  res.end();
+});
+
+const carts = [];
+
+app.post("/addToCart", async ({body}, res) => {
+  let usr = users.getSession(body.sessKey);
+  if (usr === undefined) return badRequest(res);
+  let artic = articles.getByName(body.articleName);
+  if (artic === undefined) badRequest(res);
+  else {
+    if (artic.stock > 0) return badRequest(res);
+    artic.stock--;
+    await db.collection("articles").findOneAndUpdate({name: body.articleName}, {$inc: {stock: -1}});
+
+    let carts = db.collection("carts");
+    let usercarts = await carts.find({owner: usr.username}).toArray();
+
+    let fine = usercarts.ea((e) => {
+      if (e.article === body.articleName) {
+        carts.findOneAndUpdate({_id: e._id}, {$inc: {quantity: 1}});
+        return true;
+      }
+    });
+
+    if (!fine) {
+      await carts.insertOne({quantity: 1, article: body.articleName, owner: usr.username});
+    }
+
+    res.send(JSON.stringify({
+      suc: true
+    }));
+    res.end();
+  }
+});
+
+app.post("/getCart", async ({body}, res) => {
+  let usr = users.getSession(body.sessKey);
+  if (usr === undefined) return badRequest(res);
+  let cart = await db.collection("carts").find({owner: usr.username}).toArray();
+  db.collection("articles").find({name: cart.artcile}).toArray;
+
+  res.send(JSON.stringify({
+    suc: true,
+
   }));
   res.end();
 });
@@ -261,8 +314,8 @@ let db;
   let dbarticles = await db.collection("articles").find().toArray();
   articles.addArticle(...dbarticles);
 
-
-
+  let dbcarts = await db.collection("carts").find().toArray();
+  carts.add(...dbcarts);
 
 
   app.listen(3001, () => {
