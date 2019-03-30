@@ -1,6 +1,6 @@
 import Manager from "./../manager";
 import Panel from "./../../_panel/panel"
-import lazyLoad, { ImportanceMap, Import } from "./../../../../lib/lazyLoad/lazyLoad";
+import lazyLoad, {ImportanceMap, Import} from "./../../../../lib/lazyLoad/lazyLoad";
 
 export default class PanelManager extends Manager {
   protected currentFrame: Panel;
