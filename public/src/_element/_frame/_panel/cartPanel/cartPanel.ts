@@ -17,20 +17,14 @@ export default class ShopPanel extends Panel {
 
   public fetchArticles() {
     (async () => {
-      this.body.emptyNodes();
-      let articles = await get("articles");
-      articles = articles.map(data => new Article(data, function() {
-        this.stock--;
-        post("addToCart", {body: {
-          articleName: data.name
-        }});
-      }));
-      this.body.apd(...articles);
+      let {articles} = await post("getCart");
+      articles = articles.map(data => new Article(data));
+      this.body.inner = articles;
     })();
   }
 
   stl() {
-    return super.stl() + require('./shopPanel.css').toString();
+    return super.stl() + require('./cartPanel.css').toString();
   }
 }
-window.customElements.define('c-shop-panel', ShopPanel);
+window.customElements.define('c-cart-panel', ShopPanel);

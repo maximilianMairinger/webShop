@@ -90,7 +90,7 @@ class UserCollecion extends Array {
     });
   }
   getSession(session) {
-    if (session === undefined) return false;
+    if (session === undefined) return undefined;
     return this.ea((usr) => {
       if (usr.sessKey === session) return usr;
     });
@@ -238,15 +238,17 @@ app.post("/addArticle", async ({body}, res) => {
   try {
     body.creator = usr.username;
     articles.addArticle(body);
-    let {name, description, price, weight, stock, picture, creator} = body;
-    stock = parseFloat(stock); if (isNaN(stock)) return badRequest(res);
-    price = parseFloat(price); if (isNaN(price)) return badRequest(res);
-    weight = parseFloat(weight); if (isNaN(weight)) return badRequest(res);
-    await db.collection("articles").insertOne({name, description, price, weight, stock, picture, creator});
   }
   catch (e) {
     return badRequest(res);
   }
+
+  let {name, description, price, weight, stock, picture, creator} = body;
+  stock = parseFloat(stock); if (isNaN(stock)) return badRequest(res);
+  price = parseFloat(price); if (isNaN(price)) return badRequest(res);
+  weight = parseFloat(weight); if (isNaN(weight)) return badRequest(res);
+  await db.collection("articles").insertOne({name, description, price, weight, stock, picture, creator});
+
 
   res.send(JSON.stringify({
     suc: true
@@ -262,7 +264,7 @@ app.post("/addToCart", async ({body}, res) => {
   let artic = articles.getByName(body.articleName);
   if (artic === undefined) badRequest(res);
   else {
-    if (artic.stock > 0) return badRequest(res);
+    if (artic.stock <= 0) return badRequest(res);
     artic.stock--;
     await db.collection("articles").findOneAndUpdate({name: body.articleName}, {$inc: {stock: -1}});
 
@@ -290,12 +292,15 @@ app.post("/addToCart", async ({body}, res) => {
 app.post("/getCart", async ({body}, res) => {
   let usr = users.getSession(body.sessKey);
   if (usr === undefined) return badRequest(res);
-  let cart = await db.collection("carts").find({owner: usr.username}).toArray();
-  db.collection("articles").find({name: cart.artcile}).toArray;
-
+  let carts = await db.collection("carts").find({owner: usr.username}).toArray();
+  let articles = [];
+  await carts.ea(async (e) => {
+    articles.add(await db.collection("articles").findOne({name: e.article}));
+  });
+  console.log(articles);
   res.send(JSON.stringify({
     suc: true,
-
+    articles
   }));
   res.end();
 });

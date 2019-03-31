@@ -138,10 +138,14 @@ set(to: string) {
   this.innerHTML = to;
 }});
 Object.defineProperty(p, "inner", {
-set(to: string | HTMLElement) {
+set(to: string | HTMLElement | HTMLElement[]) {
   if (to instanceof HTMLElement) {
-    this.innerHTML = "";
+    this.html = "";
     this.append(to);
+  }
+  else if (to instanceof Array) {
+    this.html = "";
+    this.append(...to);
   }
   else this.innerHTML = to;
 }});

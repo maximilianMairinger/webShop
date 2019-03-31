@@ -308,7 +308,7 @@ interface HTMLElement {
 	 * alias for innerHTML
  	 */
 	html: string;
-	inner: string | HTMLElement;
+	inner: string | number | boolean | HTMLElement | HTMLElement[];
 }
 
 /** Always applies or gets given action to all elements included in this list */

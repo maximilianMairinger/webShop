@@ -17,7 +17,7 @@ export default function init(resources: ImportanceMap<() => Promise<any>>) {
 
     (async () => {
       await resources.forEachOrdered(async (e: () => Promise<any>, key: Import<string>) => {
-        let instance = key.initer((await e()).default);
+        let instance = await key.initer((await e()).default);
         if (globalInitFunc !== undefined) globalInitFunc(instance);
         resolvements.get(key.val)(instance);
       });

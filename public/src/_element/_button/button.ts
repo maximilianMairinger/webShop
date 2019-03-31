@@ -10,8 +10,12 @@ export default class Button extends Element {
   private mouseOutListener: Tel;
   private callbacks: Function[] = [];
   protected active: boolean;
-  constructor(activationCallback?: Function, public enabled:boolean = true, focusOnHover:boolean = false, public tabIndex: number = 0, public obtainDefault: boolean = false, public preventFocus = false, blurOnMouseOut: boolean = false) {
+
+  private _enabled: boolean;
+  constructor(activationCallback?: Function, enabled:boolean = true, focusOnHover:boolean = false, public tabIndex: number = 0, public obtainDefault: boolean = false, public preventFocus = false, blurOnMouseOut: boolean = false) {
     super(false, false);
+
+    this.enabled = enabled;
 
     let alreadyPressed = false;
 
@@ -74,6 +78,14 @@ export default class Button extends Element {
   }
   public get focusOnHover(): boolean {
     return this.doesFocusOnHover;
+  }
+  public set enabled(to: boolean) {
+    this._enabled = to;
+    if (to) this.css("cursor", "pointer");
+    else this.css("cursor", "default");
+  }
+  public get enabled() {
+    return this._enabled;
   }
   public click(e?: Event) {
     if (e !== undefined && !this.obtainDefault) e.preventDefault();
