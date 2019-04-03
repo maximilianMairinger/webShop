@@ -14,6 +14,7 @@ export default class NewArticleWindow extends Window {
     let nameIn = new Input("Name", "text", cb);
     let weightIn = new Input("Weight", "number", cb);
     let stockIn = new Input("Stock", "number", cb);
+    stockIn.customVerification = n => Number.isInteger(n);
     let priceIn = new Input("Price", "number", cb);
     let descriptionIn = ce("textarea");
     descriptionIn.placeholder = "Description";

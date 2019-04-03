@@ -87,6 +87,9 @@ export default class Button extends Element {
   public get enabled() {
     return this._enabled;
   }
+  public disable() {
+    this.enabled = false;
+  }
   public click(e?: Event) {
     if (e !== undefined && !this.obtainDefault) e.preventDefault();
     if (this.enabled) {

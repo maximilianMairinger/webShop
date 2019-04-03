@@ -12,7 +12,7 @@ export default class Input extends Element {
   private allElems: NodeLs;
 
   private _type: "password" | "text" | "number" | "email";
-  constructor(placeholder: string = "", type: "password" | "text" | "number" | "email" = "text", public submitCallback?: Function, value?: any, public customVerification?: (value: string) => boolean) {
+  constructor(placeholder: string = "", type: "password" | "text" | "number" | "email" = "text", public submitCallback?: Function, value?: any, public customVerification?: (value: any) => boolean) {
     super();
 
     this.placeholder = dc("input-placeholder");
@@ -95,7 +95,9 @@ export default class Input extends Element {
   }
   public get value(): any {
     let v = this.input.value;
-    if (this.type === "number") Number(v);
+    if (this.type === "number") {
+      return +v;
+    }
     return v;
   }
   public set value(to: any) {
@@ -104,13 +106,8 @@ export default class Input extends Element {
   }
   private validate() {
     let valid = true;
-    if (this.type === "number") {
-      valid = !isNaN(parseFloat(this.value));
-    }
-    else if (this.type === "email") {
-      valid = emailValidationRegex.test(this.value.toLowerCase());
-    }
-
+    if (this.type === "number") valid = !isNaN(this.value);
+    else if (this.type === "email") valid = emailValidationRegex.test(this.value.toLowerCase());
     if (this.customVerification !== undefined) if (!this.customVerification(this.value)) valid = false;
     return valid;
   }

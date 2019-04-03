@@ -44,7 +44,7 @@ p.css = function(key_css: string | object, val?: string | number): any {
     this.style[key_css] = formatStyle(key_css, val);
   }
   else return window.getComputedStyle(this)[key_css];
-  return;
+  return this;
 };
 
 function defaultFrame(frame: object): object {
@@ -94,7 +94,7 @@ p.anim = function(frame_frames: object | object[], options: WAAPIOptions = {}) {
 
     if (frame_frames instanceof Array) {
       let frames: object[] = frame_frames;
-      frames.forEach((frame) => {
+      frames.ea((frame) => {
         formatCss(frame);
       });
       //@ts-ignore
@@ -138,14 +138,14 @@ set(to: string) {
   this.innerHTML = to;
 }});
 Object.defineProperty(p, "inner", {
-set(to: string | HTMLElement | HTMLElement[]) {
-  if (to instanceof HTMLElement) {
+set(to: string | HTMLElement | Array<string | number | string | boolean>) {
+  if (to instanceof Array) {
+    this.html = "";
+    this.apd(...to);
+  }
+  else if (to instanceof HTMLElement) {
     this.html = "";
     this.append(to);
-  }
-  else if (to instanceof Array) {
-    this.html = "";
-    this.append(...to);
   }
   else this.innerHTML = to;
 }});
@@ -162,22 +162,22 @@ p.removeClass = function(...className: string[]) {
 
 p.hasClass = function(...className: string[]) {
   let has = true;
-  className.forEach((cls) => {
+  className.ea((cls) => {
     if (!this.classList.contains(cls)) has = false;
   });
   return has
 }
 
 p.toggleClass = function(...className: string[]) {
-  className.forEach((cls) => {
+  className.ea((cls) => {
     if (this.hasClass(cls)) this.removeClass(cls);
     else this.addClass(cls);
   });
   return this
 }
 
-p.apd = function(...elems: Array<HTMLElement | string>) {
-  elems.forEach((e) => {
+p.apd = function(...elems: Array<HTMLElement | string | boolean | number>) {
+  elems.ea((e) => {
     if (e instanceof HTMLElement) this.append(e);
     else this.innerHTML += e;
   });
@@ -282,7 +282,7 @@ export class NodeLs<T extends HTMLElement = HTMLElement> extends Array<T> implem
   }
   childs(selector: string = "*"): NodeLs<HTMLElement> {
     let ls = new NodeLs();
-    this.forEach((e) => {
+    this.ea((e) => {
       ls.add(...e.childs(selector));
     });
     return ls;
@@ -293,7 +293,7 @@ export class NodeLs<T extends HTMLElement = HTMLElement> extends Array<T> implem
   }
   hasClass(...classNames: string[]): boolean {
     let has = true;
-    this.forEach((e) => {
+    this.ea((e) => {
       if (!e.hasClass(...classNames)) has = false;
     });
     return has
@@ -308,26 +308,26 @@ export class NodeLs<T extends HTMLElement = HTMLElement> extends Array<T> implem
   }
 
   set html(to: string) {
-    this.forEach((e) => {
+    this.ea((e) => {
       e.html = to;
     });
   }
   get html(): string {
     let s = "";
-    this.forEach((e) => {
+    this.ea((e) => {
       s += e.html;
     })
     return s;
   }
   set inner(to: string | HTMLElement) {
-    this.forEach((e) => {
+    this.ea((e) => {
       e.inner = to;
     });
   }
 
 
   private exec(name: string, args: IArguments): void {
-    this.forEach((e) => {
+    this.ea((e) => {
       e[name](...args);
     });
   }

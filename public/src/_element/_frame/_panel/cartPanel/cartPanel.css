@@ -8,3 +8,9 @@ c-article-display-window {
   position: relative;
   margin: 30px 50px;
 }
+
+c-block-button {
+  position: absolute;
+  bottom: 50px;
+  right: 70px;
+}

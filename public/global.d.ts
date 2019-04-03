@@ -308,7 +308,7 @@ interface HTMLElement {
 	 * alias for innerHTML
  	 */
 	html: string;
-	inner: string | number | boolean | HTMLElement | HTMLElement[];
+	inner: string | number | boolean | HTMLElement | Array<HTMLElement | boolean | string | number>;
 }
 
 /** Always applies or gets given action to all elements included in this list */
@@ -346,7 +346,7 @@ interface GenericNodeLs<T extends HTMLElement = HTMLElement> extends Array<T> {
 	/**
  	 * Appends given elems
    */
-	apd(...elems: Array<HTMLElement | string>): this;
+	apd(...elems: Array<HTMLElement | string | number | boolean>): this;
 	/**
 	 * Empties the node so that no elements are inside
  	 */
@@ -368,7 +368,7 @@ interface GenericNodeLs<T extends HTMLElement = HTMLElement> extends Array<T> {
 	 * alias for innerHTML
  	 */
 	html: string;
-	inner: string | HTMLElement;
+	inner: string | number | boolean | HTMLElement | Array<HTMLElement | boolean | string | number>;
 }
 
 interface cssFucntion {

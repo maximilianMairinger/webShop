@@ -1,7 +1,6 @@
 // QUESTION: How many db req; when db req and when ram of server (sessions??)
 // QUESTION: Good ieda to check data types and stuff here
 
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const MC = require('mongodb').MongoClient;
@@ -177,7 +176,7 @@ class Article {
     return this._weight;
   }
   set stock(to) {
-    if (isNumber(to)) this._stock = to;
+    if (isNumber(to) || !Number.isInteger(to)) this._stock = to;
     else throw new InvalidInputError();
   }
   get stock() {
@@ -295,9 +294,10 @@ app.post("/getCart", async ({body}, res) => {
   let carts = await db.collection("carts").find({owner: usr.username}).toArray();
   let articles = [];
   await carts.ea(async (e) => {
-    articles.add(await db.collection("articles").findOne({name: e.article}));
+    let artic = await db.collection("articles").findOne({name: e.article});
+    artic.quantity = e.quantity;
+    articles.add(artic);
   });
-  console.log(articles);
   res.send(JSON.stringify({
     suc: true,
     articles
@@ -327,3 +327,41 @@ let db;
     console.log("listening on port 3001");
   });
 })();
+
+
+
+///PAYMENT
+
+const stripe = require("stripe")("sk_test_4eC39HqLyjWDarjtT1zdp7dc");
+
+app.post("buy", async ({body}, res) => {
+
+  let usr = users.getSession(body.sessKey);
+  if (usr === undefined) return badRequest(res);
+
+  let carts = await db.collection("carts").find({owner: usr.username}).toArray();
+  let articles = [];
+
+  await carts.ea(async (e) => {
+    let artic = await db.collection("articles").findOne({name: e.article});
+    artic.quantity = e.quantity;
+    articles.add(artic);
+  });
+
+
+
+
+  stripe.customers.create({
+     email: req.body.stripeEmail,
+    source: req.body.stripeToken
+  })
+  .then(customer =>
+    stripe.charges.create({
+      amount,
+      description: "Sample Charge",
+         currency: "usd",
+         customer: customer.id
+    }))
+  .then(charge => res.render("charge.pug"));
+
+})

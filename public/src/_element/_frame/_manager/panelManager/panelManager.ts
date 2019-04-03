@@ -15,18 +15,18 @@ export default class PanelManager extends Manager {
     const impMap = new ImportanceMap<() => Promise<any>>(
       {key: new Import<string>("newArticle", 3, (AddArticlePanel) => {
         return new AddArticlePanel(cb, async () => {
-          (await this.map.get("shop")).fetchArticles();
+          (await this.map.get("shop")).fetch();
         });
       }), val: () => import("./../../_panel/_windowPanel/newArticlePanel/newArticlePanel")},
       {key: new Import<string>("shop", 1, (Shop) => {
-        return new Shop(cb);
+        return new Shop(cb, true, async () => {
+          (await this.map.get("cart")).fetch();
+        });
       }), val: () => import("./../../_panel/shopPanel/shopPanel")},
       {key: new Import<string>("cart", 2, (Cart) => {
-        return new Cart(cb);
+        return new Cart(cb, false);
       }), val: () => import("./../../_panel/cartPanel/cartPanel")},
     );
-
-
 
     this.map = lazyLoad(impMap)((panel) => {
       this.body.apd(panel);
@@ -42,6 +42,7 @@ export default class PanelManager extends Manager {
     return this._currentPanelName;
   }
   protected async activationCallback(active: boolean) {
+    (await this.map.get("cart")).fetch();
     this.currentFrame.vate(active)
   }
   stl() {
