@@ -31,7 +31,9 @@ export default class Main extends Page {
       this.setPanel(panelName);
       if (this.swapableNav) this.setNavOpen(false);
     });
-    this.panelManager = new PanelManager(panelName, () => {this.nav.focus();});
+    this.panelManager = new PanelManager(panelName, (to) => {
+      this.setPanel(to);
+    }, () => {this.nav.focus();});
 
     this.sra(this.overlay, this.navOpenSelector, this.nav, this.panelManager);
 

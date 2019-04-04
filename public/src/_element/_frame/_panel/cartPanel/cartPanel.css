@@ -1,3 +1,7 @@
+:host {
+  overflow-x: hidden;
+}
+
 shop-panel-body {
   display: flex;
   justify-content: center;
@@ -10,7 +14,7 @@ c-article-display-window {
 }
 
 c-block-button {
-  position: absolute;
+  position: fixed;
   bottom: 50px;
   right: 70px;
 }

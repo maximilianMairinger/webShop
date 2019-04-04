@@ -7,7 +7,7 @@ export default class PanelManager extends Manager {
   private _currentPanelName: string;
 
   private map: Map<string, Promise<any>>;
-  constructor(panel: string, public blurCallback?: Function) {
+  constructor(panel: string, setPanelCb: Function, public blurCallback?: Function) {
     super();
 
     let cb = (e) => {if (this.blurCallback !== undefined) this.blurCallback(e)};
@@ -24,7 +24,9 @@ export default class PanelManager extends Manager {
         });
       }), val: () => import("./../../_panel/shopPanel/shopPanel")},
       {key: new Import<string>("cart", 2, (Cart) => {
-        return new Cart(cb, false);
+        return new Cart(() => {
+          setPanelCb("shop");
+        }, cb, false);
       }), val: () => import("./../../_panel/cartPanel/cartPanel")},
     );
 

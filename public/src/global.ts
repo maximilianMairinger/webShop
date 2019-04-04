@@ -84,7 +84,7 @@ p.anim = function(frame_frames: object | object[], options: WAAPIOptions = {}) {
 
     if (options.duration === undefined) options.duration = 100;
     if (options.iterations === undefined) options.iterations = 1;
-    if (options.easing === undefined) options.easing = "linear";
+    if (options.easing === undefined) options.easing = "ease";
     let fill = options.fill;
     if (fill === undefined) fill = true;
     //@ts-ignore

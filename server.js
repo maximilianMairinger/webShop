@@ -306,6 +306,19 @@ app.post("/getCart", async ({body}, res) => {
 });
 
 
+app.post("/clearCart", async ({body}, res) => {
+  let usr = users.getSession(body.sessKey);
+  if (usr === undefined) return badRequest(res);
+
+  let carts = await db.collection("carts").deleteMany({owner: usr.username});
+
+  res.send(JSON.stringify({
+    suc: true
+  }));
+  res.end()
+})
+
+
 let db;
 
 (async () => {
